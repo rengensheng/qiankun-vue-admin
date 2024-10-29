@@ -10,7 +10,7 @@ import { registerStore } from '@packages/store/index.ts'
 registerMicroApps([
   {
     name: 'sub-vue3-app',
-    entry: import.meta.env.MODE === 'development' ? 'http://localhost:5174' : '/vue3-app/',
+    entry: import.meta.env.MODE === 'development' ? 'http://localhost:5174' : '/sub-vue3-app/',
     container: '#sub-app-container',
     activeRule: '/sub/vue3',
     props: {

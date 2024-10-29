@@ -15,7 +15,7 @@ export default defineConfig(({ mode }) => {
       filename: "test.html",
       open:true
     })],
-    base: "./",
+    base: "/",
     server: {
       proxy: {
         "/api": {
