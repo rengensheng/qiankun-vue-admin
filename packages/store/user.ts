@@ -4,12 +4,13 @@ import { UserLoginRes, Route } from "@packages/types"
 
 type UserStoreState = {
   user: UserLoginRes | null;
-  menuList: Route[] | undefined;
+  menuList: Route[];
 }
 
 type UserStoreAction = {
   login(userInfo: UserLoginRes): void;
-  loadMenuList(menuList: Route[]): void;
+  getUserInfo(): void;
+  loadMenuList(): void;
 }
 
 export const useUserStore = defineStore<string, UserStoreState, {}, UserStoreAction>("userStore", {
@@ -22,11 +23,18 @@ export const useUserStore = defineStore<string, UserStoreState, {}, UserStoreAct
       this.user = userInfo;
       localStorage.setItem("user", JSON.stringify(userInfo));
       localStorage.setItem("token", userInfo.token);
-      getMenuList()
+      this.loadMenuList()
+    },
+    async getUserInfo() {
+      const userInfo = localStorage.getItem("user");
+      if (userInfo) {
+        this.user = JSON.parse(userInfo);
+        this.loadMenuList()
+      }
     },
     async loadMenuList() {
       const menuListResp = await getMenuList()
-      this.menuList = menuListResp.result
+      this.menuList = menuListResp.result || []
     }
   },
 })

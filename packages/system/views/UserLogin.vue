@@ -2,9 +2,11 @@
 import { Input, Button, message } from "@packages/components";
 import { useUserStore } from "@packages/store";
 import { userLogin } from "@packages/api/user/login";
+import { useRouter } from "vue-router";
 import { ref } from "vue";
 
 const userStore = useUserStore();
+const router = useRouter();
 const username = ref<string>("");
 const password = ref<string>("");
 
@@ -18,6 +20,7 @@ async function handleLogin() {
     if (userResp.result) {
       userStore.login(userResp.result);
       message.success("登录成功");
+      router.replace("/");
     } else {
       message.error(userResp.message);
     }

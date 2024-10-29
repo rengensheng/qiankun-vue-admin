@@ -1,11 +1,9 @@
 
 import router from "./router";
-import type { App, Component } from "vue";
-import * as Icons from "@packages/components/icons";
+import type { App } from "vue";
+import { Router } from "vue-router";
 
-export function registerRouter(app: App) {
-  for (const icon in Icons) {
-    app.component(icon, (Icons as any)[icon] as Component);
-  }
+export function registerRouter(app: App): Router {
   app.use(router);
+  return router
 }

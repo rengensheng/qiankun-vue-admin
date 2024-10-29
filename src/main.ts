@@ -9,17 +9,19 @@ import { registerStore } from '@packages/store/index.ts'
 
 registerMicroApps([
   {
-    name: 'vue3-app',
-    entry: import.meta.env.MODE === 'development' ? 'http://127.0.0.1:5174' : '/vue3-app/',
+    name: 'sub-vue3-app',
+    entry: import.meta.env.MODE === 'development' ? 'http://localhost:5174' : '/vue3-app/',
     container: '#sub-app-container',
-    activeRule: '/vue3-app',
+    activeRule: '/sub/vue3',
     props: {
       msg: "我是来自主应用的值-vue3"
     }
   }
 ])
-start()
 const app = createApp(App)
-registerRouter(app)
+const router = registerRouter(app)
 registerStore(app)
 app.mount('#app')
+router.afterEach(() => {
+  start()
+})

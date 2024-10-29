@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useUserStore } from "@packages/store";
 import {
   Menu,
   SubMenu,
@@ -10,10 +11,29 @@ import {
   Breadcrumb,
   BreadcrumbItem,
 } from "@packages/components";
-import { ref } from "vue";
+import { nextTick, ref, watchEffect } from "vue";
+import { useRouter } from "vue-router";
 
-const currentSelectedMenuKeys = ref<string[]>(["1"]);
-const openKeys = ref<string[]>(["sub1"]);
+const userStore = useUserStore();
+const router = useRouter();
+const currentSelectedMenuKeys = ref<string[]>([""]);
+const openKeys = ref<string[]>([]);
+watchEffect(() => {
+  if (userStore.menuList.length > 0) {
+    if (userStore.menuList[0].children?.length) {
+      currentSelectedMenuKeys.value = [userStore.menuList[0].children[0].path];
+    } else {
+      currentSelectedMenuKeys.value = [userStore.menuList[0].path];
+    }
+    openKeys.value = [userStore.menuList[0].path];
+  }
+});
+function onSelect() {
+  console.log("onSelect");
+  nextTick(() => {
+    router.push("/sub/vue3");
+  });
+}
 </script>
 
 <template>
@@ -36,18 +56,23 @@ const openKeys = ref<string[]>(["sub1"]);
           mode="inline"
           :style="{ height: '100%', borderRight: 0 }"
         >
-          <SubMenu key="sub1">
-            <template #title>
-              <span class="flex items-center">
-                <user-outlined class="mr-2" />
-                subnav 1
-              </span>
-            </template>
-            <MenuItem key="1">option1</MenuItem>
-            <MenuItem key="2">option2</MenuItem>
-            <MenuItem key="3">option3</MenuItem>
-            <MenuItem key="4">option4</MenuItem>
-          </SubMenu>
+          <template v-for="menuItem in userStore.menuList" :key="menuItem.path">
+            <SubMenu v-if="menuItem.children?.length" :key="menuItem.path">
+              <template #title>
+                <span class="flex items-center">
+                  {{ menuItem.name }}
+                </span>
+              </template>
+              <MenuItem
+                v-for="menuChildItem in menuItem.children"
+                :key="menuChildItem.path"
+                >{{ menuChildItem.name }}</MenuItem
+              >
+            </SubMenu>
+            <MenuItem v-else :key="menuItem.path + '-' + menuItem.name">{{
+              menuItem.name
+            }}</MenuItem>
+          </template>
         </Menu>
       </LayoutSider>
       <Layout style="padding: 0 24px 24px">
@@ -62,7 +87,8 @@ const openKeys = ref<string[]>(["sub1"]);
             minHeight: '280px',
           }"
         >
-          Content
+          <button @click="onSelect">显示</button>
+          <router-view />
         </LayoutContent>
       </Layout>
     </Layout>

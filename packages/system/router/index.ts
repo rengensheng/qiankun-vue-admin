@@ -10,7 +10,12 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     name: 'Home',
-    component: () => import('../views/BaseLayout.vue')
+    component: () => import('../views/BaseLayout.vue'),
+    children: [{
+      path: '/sub/:name',
+      name: 'Sub',
+      component: () => import('../views/SubContainer.vue')
+    }]
   },
 ]
 const router = createRouter({
