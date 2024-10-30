@@ -32,11 +32,12 @@ async function getMenuListFlatten(): Promise<Route[]> {
 
 onMounted(async () => {
   const menuList = await getMenuListFlatten();
+  console.log('route', route)
   menuList.forEach((menu) => {
     if (menu.path === route.fullPath) {
       console.log('menu', menu);
       microApp.value = loadMicroApp({
-        name: menu.name,
+        name: route.params.appName,
         entry: menu.component,
         container: "#sub-app-container",
         props: {
