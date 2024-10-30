@@ -7,6 +7,9 @@
     "dev:dev": "vite -m development",
     "dev:prod": "vite -m production",
     "dev": "vite -m development",
+    "start:rp": "pnpm --filter react-project run dev", 
+    "start:sp": "pnpm --filter sub-project run dev",
+    "bootstrap": "pnpm install",
     "build": "vue-tsc -b && vite build",
     "preview": "vite preview"
   },
