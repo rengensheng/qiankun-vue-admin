@@ -16,6 +16,15 @@ registerMicroApps([
     props: {
       msg: "我是来自主应用的值-vue3"
     }
+  },
+  {
+    name: 'sub-react-app',
+    entry: import.meta.env.MODE === 'development' ? 'http://localhost:5174' : '/sub-react-app/',
+    container: '#sub-app-container',
+    activeRule: '/sub/react',
+    props: {
+      msg: "我是来自主应用的值-react"
+    }
   }
 ])
 const app = createApp(App)
