@@ -12,6 +12,8 @@ export {
   SubMenu,
   Breadcrumb,
   BreadcrumbItem,
+  Tabs,
+  TabPane,
 } from 'ant-design-vue'
 
 

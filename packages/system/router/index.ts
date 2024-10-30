@@ -5,18 +5,18 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/login',
     name: 'Login',
-    component: () => import('../views/UserLogin.vue')
+    component: () => import('../views/login/index.vue')
   },
   {
     path: '/',
-    name: 'Home',
-    component: () => import('../views/BaseLayout.vue'),
+    name: 'BaseLayout',
+    component: () => import('../views/layouts/index.vue'),
     children: [{
-      path: '/sub/:name',
-      name: 'Sub',
-      component: () => import('../views/SubContainer.vue')
+      path: '/micro/:name',
+      name: 'MicroChild',
+      component: () => import('../views/micro/index.vue')
     }]
-  },
+  }
 ]
 const router = createRouter({
   history: createWebHistory(),
