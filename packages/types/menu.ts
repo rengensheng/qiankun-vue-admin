@@ -9,7 +9,7 @@ export type Route = {
   path: string;
   name: string;
   icon: string;
-  component: string;
+  component: any;
   id: string;
   meta: Meta;
   orderNo: number;
