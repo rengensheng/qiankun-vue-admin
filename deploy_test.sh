@@ -1,0 +1,1 @@
+rsync -avz ./dist/* ubuntu@117.50.172.13:/var/www/html/test/

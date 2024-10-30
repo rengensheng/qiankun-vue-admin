@@ -28,12 +28,9 @@ export {
   Radio,
   RadioGroup,
   RadioButton,
-  TreeSelect,
+  TreeSelect
 } from 'ant-design-vue'
 
-export type {
-  PaginationProps
-} from 'ant-design-vue'
-
+export type { PaginationProps } from 'ant-design-vue'
 
 import 'ant-design-vue/dist/reset.css'

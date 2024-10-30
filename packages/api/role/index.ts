@@ -1,10 +1,10 @@
-import { postAction } from "../utils/request";
-import { RoleType, ApiListType } from "@packages/types";
+import { postAction } from '../utils/request'
+import { RoleType, ApiListType } from '@packages/types'
 
 export function getRoleList(pageNo: number | undefined, pageSize: number | undefined) {
   return postAction<ApiListType<RoleType>>('/api/role/list', {
     pageNo,
-    pageSize,
+    pageSize
   })
 }
 

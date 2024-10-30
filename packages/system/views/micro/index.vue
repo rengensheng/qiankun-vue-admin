@@ -1,60 +1,62 @@
 <script setup lang="ts">
-import { useRoute } from "vue-router";
-import { useUserStore } from "@packages/store";
-import { Route } from "@packages/types";
-import { onMounted, onUnmounted, ref } from "vue";
-import { loadMicroApp } from "qiankun";
+import { useRoute } from 'vue-router'
+import { useUserStore } from '@packages/store'
+import { Route } from '@packages/types'
+import { onMounted, onUnmounted, ref } from 'vue'
+import { loadMicroApp } from 'qiankun'
 
-const route = useRoute();
-const store = useUserStore();
-const microApp = ref<any>(null);
+const route = useRoute()
+const store = useUserStore()
+const microApp = ref<any>(null)
 
 async function getMenuListFlatten(): Promise<Route[]> {
-  const sourceMenuList = await store.loadMenuList();
-  const menuList: Route[] = [];
+  const sourceMenuList = await store.loadMenuList()
+  const menuList: Route[] = []
   sourceMenuList.forEach((item) => {
     if (item.children && item.children.length) {
-      const childMenus: Route[] = [];
+      const childMenus: Route[] = []
       item.children.forEach((child) => {
         childMenus.push({
           ...child,
-          path: item.path + "/" + child.path,
-        });
-      });
-      menuList.push(...childMenus);
+          path: item.path + '/' + child.path
+        })
+      })
+      menuList.push(...childMenus)
     } else {
-      menuList.push(item);
+      menuList.push(item)
     }
-  });
+  })
 
-  return menuList;
+  return menuList
 }
 
 onMounted(async () => {
-  const menuList = await getMenuListFlatten();
+  const menuList = await getMenuListFlatten()
   console.log('route', route)
   menuList.forEach((menu) => {
     if (menu.path === route.fullPath) {
-      console.log('menu', menu);
-      microApp.value = loadMicroApp({
-        name: route.params.appName as string,
-        entry: menu.component,
-        container: "#sub-app-container",
-        props: {
-          menu: menu,
+      console.log('menu', menu)
+      microApp.value = loadMicroApp(
+        {
+          name: route.params.appName as string,
+          entry: menu.component,
+          container: '#sub-app-container',
+          props: {
+            menu: menu
+          }
         },
-        
-      }, {
-        getPublicPath(entry: any) {
-          return entry.substring(0, entry.lastIndexOf("/") + 1).replace('micro/', '');
-        },
-      });
+        {
+          getPublicPath(entry: any) {
+            return entry.substring(0, entry.lastIndexOf('/') + 1).replace('micro/', '')
+          }
+        }
+      )
     }
-  });
-});
+  })
+})
 onUnmounted(() => {
-  microApp.value?.unmount();
-});
+  microApp.value?.unmount()
+})
 </script>
 
 <template>

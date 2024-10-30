@@ -1,31 +1,31 @@
 <script setup lang="ts">
-import { Input, Button, message } from "@packages/components";
-import { useUserStore } from "@packages/store";
-import { userLogin } from "@packages/api/user/login";
-import { useRouter } from "vue-router";
-import { ref } from "vue";
+import { Input, Button, message } from '@packages/components'
+import { useUserStore } from '@packages/store'
+import { userLogin } from '@packages/api/user/login'
+import { useRouter } from 'vue-router'
+import { ref } from 'vue'
 
-const userStore = useUserStore();
-const router = useRouter();
-const username = ref<string>("");
-const password = ref<string>("");
+const userStore = useUserStore()
+const router = useRouter()
+const username = ref<string>('')
+const password = ref<string>('')
 
 async function handleLogin() {
   if (!username.value || !password.value) {
-    message.error("用户名和密码不能为空");
-    return;
+    message.error('用户名和密码不能为空')
+    return
   }
   try {
-    const userResp = await userLogin(username.value, password.value);
+    const userResp = await userLogin(username.value, password.value)
     if (userResp.result) {
-      userStore.login(userResp.result);
-      message.success("登录成功");
-      router.replace("/");
+      userStore.login(userResp.result)
+      message.success('登录成功')
+      router.replace('/')
     } else {
-      message.error(userResp.message);
+      message.error(userResp.message)
     }
   } catch (error: any) {
-    message.error(error.message);
+    message.error(error.message)
   }
 }
 </script>
@@ -49,7 +49,10 @@ async function handleLogin() {
             placeholder="密码"
           />
         </div>
-        <Button type="primary" class="w-full mt-4" @click="handleLogin"
+        <Button
+          type="primary"
+          class="w-full mt-4"
+          @click="handleLogin"
           >登录系统</Button
         >
       </div>

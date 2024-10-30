@@ -1,9 +1,9 @@
-import { App } from "vue";
+import { App } from 'vue'
 import { createPinia } from 'pinia'
 
-export * from "./user"
+export * from './user'
 
-export function registerStore (app: App) {
+export function registerStore(app: App) {
   const pinia = createPinia()
   app.use(pinia)
 }

@@ -1,10 +1,10 @@
-import { postAction } from "../utils/request";
-import { AccountType, ApiListType } from "@packages/types";
+import { postAction } from '../utils/request'
+import { AccountType, ApiListType } from '@packages/types'
 
 export function getAccountList(pageNo: number | undefined, pageSize: number | undefined) {
   return postAction<ApiListType<AccountType>>('/api/user/list', {
     pageNo,
-    pageSize,
+    pageSize
   })
 }
 

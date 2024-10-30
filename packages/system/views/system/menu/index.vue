@@ -12,132 +12,122 @@ import {
   RadioGroup,
   TreeSelect,
   InputNumber,
-  message,
-} from "@packages/components";
-import { useDict } from "@packages/hooks";
-import type { PaginationProps } from "@packages/components";
-import {
-  getMenuDataList,
-  deleteMenu,
-  createMenu,
-  updateMenu,
-} from "@packages/api/menu";
-import { ref, watchEffect } from "vue";
-import { DictOption, MenuType } from "@packages/types";
-const dataSource = ref<MenuType[]>([]);
-const openModal = ref<boolean>(false);
-const editRecord = ref<any>();
-const menuTreeOptions = ref<DictOption[]>([]);
+  message
+} from '@packages/components'
+import { useDict } from '@packages/hooks'
+import type { PaginationProps } from '@packages/components'
+import { getMenuDataList, deleteMenu, createMenu, updateMenu } from '@packages/api/menu'
+import { ref, watchEffect } from 'vue'
+import { DictOption, MenuType } from '@packages/types'
+const dataSource = ref<MenuType[]>([])
+const openModal = ref<boolean>(false)
+const editRecord = ref<any>()
+const menuTreeOptions = ref<DictOption[]>([])
 const pagination = ref<PaginationProps>({
   current: 1,
   pageSize: 10,
   total: 0,
   onChange: (page: number, pageSize: number) => {
-    pagination.value.current = page;
-    pagination.value.pageSize = pageSize;
-  },
-});
+    pagination.value.current = page
+    pagination.value.pageSize = pageSize
+  }
+})
 const columns = [
   {
-    title: "菜单名",
-    dataIndex: "menuName",
+    title: '菜单名',
+    dataIndex: 'menuName'
   },
   {
-    title: "权限标识",
-    dataIndex: "permission",
+    title: '权限标识',
+    dataIndex: 'permission'
   },
   {
-    title: "组件",
-    dataIndex: "component",
+    title: '组件',
+    dataIndex: 'component'
   },
   {
-    title: "排序",
-    dataIndex: "orderNo",
+    title: '排序',
+    dataIndex: 'orderNo'
   },
   {
-    title: "状态",
-    dataIndex: "status",
+    title: '状态',
+    dataIndex: 'status'
   },
   {
-    title: "创建时间",
-    dataIndex: "createdTime",
+    title: '创建时间',
+    dataIndex: 'createdTime'
   },
   {
-    title: "操作",
-    dataIndex: "action",
-  },
-];
+    title: '操作',
+    dataIndex: 'action'
+  }
+]
 async function loadDict() {
-  menuTreeOptions.value = await useDict(
-    "/api/menu/list",
-    "menuName",
-    "id",
-    "parentMenu"
-  );
-  console.log("tree", menuTreeOptions.value);
+  menuTreeOptions.value = await useDict('/api/menu/list', 'menuName', 'id', 'parentMenu')
+  console.log('tree', menuTreeOptions.value)
 }
-loadDict();
+loadDict()
 async function getList() {
-  const res = await getMenuDataList();
+  const res = await getMenuDataList()
   if (res.result && res.result.items) {
-    const menuList = res.result.items;
+    const menuList = res.result.items
     menuList.forEach((menu) => {
-      menu.key = menu.id;
-      menu.children = menuList.filter((item) => item.parentMenu === menu.id);
+      menu.key = menu.id
+      menu.children = menuList.filter((item) => item.parentMenu === menu.id)
       if (!menu.children.length) {
-        delete menu.children;
+        delete menu.children
       }
-    });
-    dataSource.value = menuList.filter((item) => !item.parentMenu);
-    pagination.value.total = res.result.total;
+    })
+    dataSource.value = menuList.filter((item) => !item.parentMenu)
+    pagination.value.total = res.result.total
   }
 }
 function handleOpenCreateUser() {
-  editRecord.value = {};
-  openModal.value = true;
+  editRecord.value = {}
+  openModal.value = true
 }
 function handleOpenEditUser(record: MenuType) {
-  editRecord.value = { ...record };
-  openModal.value = true;
+  editRecord.value = { ...record }
+  openModal.value = true
 }
 function handleSaveUser() {
   if (editRecord.value.id) {
-    handleUpdate(editRecord.value);
+    handleUpdate(editRecord.value)
   } else {
-    handleCreate(editRecord.value);
+    handleCreate(editRecord.value)
   }
 }
 function handleCreate(record: MenuType) {
   createMenu(record)
     .then(() => {
-      openModal.value = false;
-      getList();
-      message.success("创建成功");
-      loadDict();
+      openModal.value = false
+      getList()
+      message.success('创建成功')
+      loadDict()
     })
     .catch((e) => {
-      message.error(e.message);
-    });
+      message.error(e.message)
+    })
 }
 function handleUpdate(record: MenuType) {
   updateMenu(record)
     .then(() => {
-      openModal.value = false;
-      getList();
-      loadDict();
-      message.success("编辑成功");
+      openModal.value = false
+      getList()
+      loadDict()
+      message.success('编辑成功')
     })
     .catch((e) => {
-      message.error(e.message);
-    });
+      message.error(e.message)
+    })
 }
 async function handleDelete(record: MenuType) {
-  await deleteMenu(record.id);
-  getList();
+  await deleteMenu(record.id)
+  getList()
 }
 watchEffect(() => {
-  getList();
-});
+  getList()
+})
 </script>
 
 <template>
@@ -146,9 +136,17 @@ watchEffect(() => {
       <h2 class="text-xl font-bold">菜单管理</h2>
     </div>
     <div class="py-2">
-      <Button type="primary" @click="handleOpenCreateUser">新建菜单</Button>
+      <Button
+        type="primary"
+        @click="handleOpenCreateUser"
+        >新建菜单</Button
+      >
     </div>
-    <Table :columns="columns" :dataSource="dataSource" :pagination="false">
+    <Table
+      :columns="columns"
+      :dataSource="dataSource"
+      :pagination="false"
+    >
       <template #bodyCell="{ column, text, record }">
         <template v-if="column.dataIndex === 'action'">
           <Space>
@@ -168,7 +166,11 @@ watchEffect(() => {
       </template>
     </Table>
   </div>
-  <Modal v-model:open="openModal" title="菜单信息" @ok="handleSaveUser">
+  <Modal
+    v-model:open="openModal"
+    title="菜单信息"
+    @ok="handleSaveUser"
+  >
     <Form
       :model="editRecord"
       :label-col="{ span: 6 }"
@@ -180,7 +182,10 @@ watchEffect(() => {
         name="type"
         :rules="[{ required: true, message: '请输入组件路径!' }]"
       >
-        <RadioGroup v-model:value="editRecord.type" button-style="solid">
+        <RadioGroup
+          v-model:value="editRecord.type"
+          button-style="solid"
+        >
           <RadioButton value="0">目录</RadioButton>
           <RadioButton value="1">菜单</RadioButton>
           <RadioButton value="2">按钮</RadioButton>
@@ -196,7 +201,10 @@ watchEffect(() => {
           placeholder="请输入菜单名称"
         />
       </FormItem>
-      <FormItem label="上级菜单" name="menuName">
+      <FormItem
+        label="上级菜单"
+        name="menuName"
+      >
         <TreeSelect
           v-model:value="editRecord.parentMenu"
           style="width: 100%"
@@ -229,7 +237,9 @@ watchEffect(() => {
           placeholder="请输入组件路径"
         />
       </FormItem>
-      <FormItem label="权限标识" name="permission"
+      <FormItem
+        label="权限标识"
+        name="permission"
         ><Input
           v-model:value="editRecord.permission"
           placeholder="请输入组件路径"
@@ -240,7 +250,10 @@ watchEffect(() => {
         name="status"
         :rules="[{ required: true, message: '请输入状态!' }]"
       >
-        <RadioGroup v-model:value="editRecord.status" button-style="solid">
+        <RadioGroup
+          v-model:value="editRecord.status"
+          button-style="solid"
+        >
           <RadioButton value="0">启用</RadioButton>
           <RadioButton value="1">禁用</RadioButton>
         </RadioGroup>
@@ -250,7 +263,10 @@ watchEffect(() => {
         name="isExt"
         :rules="[{ required: true, message: '请输入是否外链!' }]"
       >
-        <RadioGroup v-model:value="editRecord.isExt" button-style="solid">
+        <RadioGroup
+          v-model:value="editRecord.isExt"
+          button-style="solid"
+        >
           <RadioButton value="0">否</RadioButton>
           <RadioButton value="1">是</RadioButton>
         </RadioGroup>
@@ -260,7 +276,10 @@ watchEffect(() => {
         name="keepalive"
         :rules="[{ required: true, message: '请输入是否缓存!' }]"
       >
-        <RadioGroup v-model:value="editRecord.keepalive" button-style="solid">
+        <RadioGroup
+          v-model:value="editRecord.keepalive"
+          button-style="solid"
+        >
           <RadioButton value="0">否</RadioButton>
           <RadioButton value="1">是</RadioButton>
         </RadioGroup>
@@ -270,7 +289,10 @@ watchEffect(() => {
         name="show"
         :rules="[{ required: true, message: '请输入是否显示!' }]"
       >
-        <RadioGroup v-model:value="editRecord.show" button-style="solid">
+        <RadioGroup
+          v-model:value="editRecord.show"
+          button-style="solid"
+        >
           <RadioButton value="0">否</RadioButton>
           <RadioButton value="1">是</RadioButton>
         </RadioGroup>
@@ -280,7 +302,10 @@ watchEffect(() => {
         name="orderNo"
         :rules="[{ required: true, message: '请输入排序!' }]"
       >
-        <InputNumber v-model:value="editRecord.orderNo" placeholder="请输入排序" />
+        <InputNumber
+          v-model:value="editRecord.orderNo"
+          placeholder="请输入排序"
+        />
       </FormItem>
     </Form>
   </Modal>

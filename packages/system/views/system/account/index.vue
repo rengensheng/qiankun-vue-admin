@@ -10,121 +10,113 @@ import {
   Input,
   Select,
   Space,
-  message,
-} from "@packages/components";
-import { useDict } from "@packages/hooks";
-import type { PaginationProps } from "@packages/components";
-import {
-  getAccountList,
-  deleteAccount,
-  createAccount,
-  updateAccount,
-} from "@packages/api/account";
-import { ref, watchEffect } from "vue";
-import { AccountType, DictOption } from "@packages/types";
-const dataSource = ref<AccountType[]>([]);
-const openModal = ref<boolean>(false);
-const editRecord = ref<any>();
-const roleOptions = ref<DictOption[]>([]);
-const deptOptions = ref<DictOption[]>([]);
+  message
+} from '@packages/components'
+import { useDict } from '@packages/hooks'
+import type { PaginationProps } from '@packages/components'
+import { getAccountList, deleteAccount, createAccount, updateAccount } from '@packages/api/account'
+import { ref, watchEffect } from 'vue'
+import { AccountType, DictOption } from '@packages/types'
+const dataSource = ref<AccountType[]>([])
+const openModal = ref<boolean>(false)
+const editRecord = ref<any>()
+const roleOptions = ref<DictOption[]>([])
+const deptOptions = ref<DictOption[]>([])
 const pagination = ref<PaginationProps>({
   current: 1,
   pageSize: 10,
   total: 0,
   onChange: (page: number, pageSize: number) => {
-    pagination.value.current = page;
-    pagination.value.pageSize = pageSize;
-  },
-});
+    pagination.value.current = page
+    pagination.value.pageSize = pageSize
+  }
+})
 const columns = [
   {
-    title: "用户名",
-    dataIndex: "account",
+    title: '用户名',
+    dataIndex: 'account'
   },
   {
-    title: "昵称",
-    dataIndex: "nickname",
+    title: '昵称',
+    dataIndex: 'nickname'
   },
   {
-    title: "邮箱",
-    dataIndex: "email",
+    title: '邮箱',
+    dataIndex: 'email'
   },
   {
-    title: "角色",
-    dataIndex: "role",
+    title: '角色',
+    dataIndex: 'role'
   },
   {
-    title: "创建时间",
-    dataIndex: "createdTime",
+    title: '创建时间',
+    dataIndex: 'createdTime'
   },
   {
-    title: "备注",
-    dataIndex: "remark",
+    title: '备注',
+    dataIndex: 'remark'
   },
   {
-    title: "操作",
-    dataIndex: "action",
-  },
-];
+    title: '操作',
+    dataIndex: 'action'
+  }
+]
 async function loadDict() {
-  roleOptions.value = await useDict("/api/role/list", "roleName", "roleValue");
-  deptOptions.value = await useDict("/api/dept/list", "deptName", "id");
+  roleOptions.value = await useDict('/api/role/list', 'roleName', 'roleValue')
+  deptOptions.value = await useDict('/api/dept/list', 'deptName', 'id')
 }
-loadDict();
+loadDict()
 async function getList() {
-  const res = await getAccountList(
-    pagination.value.current,
-    pagination.value.pageSize
-  );
+  const res = await getAccountList(pagination.value.current, pagination.value.pageSize)
   if (res.result && res.result.items) {
-    dataSource.value = res.result.items;
-    pagination.value.total = res.result.total;
+    dataSource.value = res.result.items
+    pagination.value.total = res.result.total
   }
 }
 function handleOpenCreateUser() {
-  editRecord.value = {};
-  openModal.value = true;
+  editRecord.value = {}
+  openModal.value = true
 }
 function handleOpenEditUser(record: AccountType) {
-  editRecord.value = { ...record };
-  openModal.value = true;
+  editRecord.value = { ...record }
+  openModal.value = true
 }
 function handleSaveUser() {
   if (editRecord.value.id) {
-    handleUpdate(editRecord.value);
+    handleUpdate(editRecord.value)
   } else {
-    handleCreate(editRecord.value);
+    handleCreate(editRecord.value)
   }
 }
 function handleCreate(record: AccountType) {
   createAccount(record)
     .then(() => {
-      openModal.value = false;
-      getList();
-      message.success("创建成功");
+      openModal.value = false
+      getList()
+      message.success('创建成功')
     })
     .catch((e) => {
-      message.error(e.message);
-    });
+      message.error(e.message)
+    })
 }
 function handleUpdate(record: AccountType) {
   updateAccount(record)
     .then(() => {
-      openModal.value = false;
-      getList();
-      message.success("编辑成功");
+      openModal.value = false
+      getList()
+      message.success('编辑成功')
     })
     .catch((e) => {
-      message.error(e.message);
-    });
+      message.error(e.message)
+    })
 }
 async function handleDelete(record: AccountType) {
-  await deleteAccount(record.id);
-  getList();
+  await deleteAccount(record.id)
+  getList()
 }
 watchEffect(() => {
-  getList();
-});
+  getList()
+})
 </script>
 
 <template>
@@ -133,9 +125,17 @@ watchEffect(() => {
       <h2 class="text-xl font-bold">账号管理</h2>
     </div>
     <div class="py-2">
-      <Button type="primary" @click="handleOpenCreateUser">新建用户</Button>
+      <Button
+        type="primary"
+        @click="handleOpenCreateUser"
+        >新建用户</Button
+      >
     </div>
-    <Table :columns="columns" :dataSource="dataSource" :pagination="false">
+    <Table
+      :columns="columns"
+      :dataSource="dataSource"
+      :pagination="false"
+    >
       <template #bodyCell="{ column, text, record }">
         <template v-if="column.dataIndex === 'action'">
           <Space>
@@ -167,7 +167,11 @@ watchEffect(() => {
       />
     </div>
   </div>
-  <Modal v-model:open="openModal" title="用户信息" @ok="handleSaveUser">
+  <Modal
+    v-model:open="openModal"
+    title="用户信息"
+    @ok="handleSaveUser"
+  >
     <Form
       :model="editRecord"
       :label-col="{ span: 6 }"
@@ -179,7 +183,10 @@ watchEffect(() => {
         name="account"
         :rules="[{ required: true, message: '请输入账户名!' }]"
       >
-        <Input v-model:value="editRecord.account" placeholder="请输入账户名" />
+        <Input
+          v-model:value="editRecord.account"
+          placeholder="请输入账户名"
+        />
       </FormItem>
       <FormItem
         label="角色"
@@ -192,7 +199,10 @@ watchEffect(() => {
           :options="roleOptions"
         />
       </FormItem>
-      <FormItem label="所属部门" name="dept">
+      <FormItem
+        label="所属部门"
+        name="dept"
+      >
         <Select
           v-model:value="editRecord.dept"
           placeholder="请选择所属部门"
@@ -214,9 +224,15 @@ watchEffect(() => {
         name="email"
         :rules="[{ required: true, message: '请输入邮箱!' }]"
       >
-        <Input v-model:value="editRecord.email" placeholder="请输入邮箱" />
+        <Input
+          v-model:value="editRecord.email"
+          placeholder="请输入邮箱"
+        />
       </FormItem>
-      <FormItem label="备注" name="remark">
+      <FormItem
+        label="备注"
+        name="remark"
+      >
         <Input.TextArea
           v-model:value="editRecord.remark"
           placeholder="请输入备注"

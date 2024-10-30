@@ -11,11 +11,13 @@ const routes: RouteRecordRaw[] = [
     path: '/',
     name: 'BaseLayout',
     component: () => import('../views/layouts/index.vue'),
-    children: [{
-      path: '/micro/:appName/:name',
-      name: 'MicroChild',
-      component: () => import('../views/micro/index.vue')
-    }]
+    children: [
+      {
+        path: '/micro/:appName/:name',
+        name: 'MicroChild',
+        component: () => import('../views/micro/index.vue')
+      }
+    ]
   }
 ]
 const router = createRouter({

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useUserStore } from "@packages/store";
+import { useUserStore } from '@packages/store'
 import {
   Menu,
   SubMenu,
@@ -9,41 +9,41 @@ import {
   LayoutSider,
   LayoutContent,
   Tabs,
-  TabPane,
-} from "@packages/components";
-import { ref, watchEffect } from "vue";
-import { useRouter, useRoute } from "vue-router";
+  TabPane
+} from '@packages/components'
+import { ref, watchEffect } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 
-const userStore = useUserStore();
-const router = useRouter();
-const route = useRoute();
-const currentSelectedMenuKeys = ref<string[]>([]);
-const openKeys = ref<string[]>([]);
-const openPanes = ref<any[]>([]);
-const activePaneKey = ref<string>("");
+const userStore = useUserStore()
+const router = useRouter()
+const route = useRoute()
+const currentSelectedMenuKeys = ref<string[]>([])
+const openKeys = ref<string[]>([])
+const openPanes = ref<any[]>([])
+const activePaneKey = ref<string>('')
 
 watchEffect(() => {
   if (userStore.menuList.length > 0) {
     if (currentSelectedMenuKeys.value.length === 0) {
-      handleSelectMenu({ key: route.fullPath });
+      handleSelectMenu({ key: route.fullPath })
     }
-    currentSelectedMenuKeys.value = [route.fullPath];
-    activePaneKey.value = route.fullPath;
+    currentSelectedMenuKeys.value = [route.fullPath]
+    activePaneKey.value = route.fullPath
   }
-});
+})
 
 function findMenuInfo(key: string) {
   for (let i = 0; i < userStore.menuList.length; i++) {
-    const item = userStore.menuList[i];
+    const item = userStore.menuList[i]
     if (item.children && item.children.length) {
       for (let j = 0; j < item.children.length; j++) {
-        const child = item.children[j];
+        const child = item.children[j]
         if (key === `${item.path}/${child.path}`) {
           return {
             key,
             title: child.name,
-            path: key,
-          };
+            path: key
+          }
         }
       }
     } else {
@@ -51,50 +51,50 @@ function findMenuInfo(key: string) {
         return {
           key,
           title: item.name,
-          path: item.path,
-        };
+          path: item.path
+        }
       }
     }
   }
-  return;
+  return
 }
 function handleSelectMenu(menu: any) {
-  router.push(menu.key);
-  currentSelectedMenuKeys.value = [menu.key];
-  activePaneKey.value = menu.key;
+  router.push(menu.key)
+  currentSelectedMenuKeys.value = [menu.key]
+  activePaneKey.value = menu.key
   if (openPanes.value.some((pane) => pane.key === menu.key)) {
-    activePaneKey.value = menu.key;
-    return;
+    activePaneKey.value = menu.key
+    return
   }
-  addTab(menu.key);
+  addTab(menu.key)
 }
 async function addTab(key: string) {
   if (openPanes.value.some((pane) => pane.key === key)) {
-    activePaneKey.value = key;
-    return;
+    activePaneKey.value = key
+    return
   }
-  const menuInfo = findMenuInfo(key);
-  console.log("findMenuInfo", menuInfo);
+  const menuInfo = findMenuInfo(key)
+  console.log('findMenuInfo', menuInfo)
   if (!menuInfo) {
-    return;
+    return
   }
-  openPanes.value.push(menuInfo);
+  openPanes.value.push(menuInfo)
 }
 function deleteTab(key: any) {
-  const index = openPanes.value.findIndex((pane) => pane.key === key);
-  openPanes.value.splice(index, 1);
+  const index = openPanes.value.findIndex((pane) => pane.key === key)
+  openPanes.value.splice(index, 1)
   if (activePaneKey.value === key) {
     if (openPanes.value[index]) {
-      activePaneKey.value = openPanes.value[index].key;
+      activePaneKey.value = openPanes.value[index].key
     } else {
-      activePaneKey.value = openPanes.value[openPanes.value.length - 1].key;
+      activePaneKey.value = openPanes.value[openPanes.value.length - 1].key
     }
-    router.push(activePaneKey.value);
+    router.push(activePaneKey.value)
   }
 }
 function handleChangeTab(key: any) {
-  activePaneKey.value = key;
-  router.push(key);
+  activePaneKey.value = key
+  router.push(key)
 }
 </script>
 
@@ -111,7 +111,10 @@ function handleChangeTab(key: any) {
       </div>
     </LayoutHeader>
     <Layout>
-      <LayoutSider width="200" style="background: transparent">
+      <LayoutSider
+        width="200"
+        style="background: transparent"
+      >
         <Menu
           v-model:selectedKeys="currentSelectedMenuKeys"
           v-model:openKeys="openKeys"
@@ -123,7 +126,10 @@ function handleChangeTab(key: any) {
             v-for="(menuItem, index) in userStore.menuList"
             :key="index"
           >
-            <SubMenu v-if="menuItem.children?.length" :key="menuItem.name">
+            <SubMenu
+              v-if="menuItem.children?.length"
+              :key="menuItem.name"
+            >
               <template #title>
                 <span class="flex items-center">
                   {{ menuItem.name }}
@@ -154,7 +160,7 @@ function handleChangeTab(key: any) {
           :style="{
             background: '#fff',
             padding: '10px 20px',
-            minHeight: '280px',
+            minHeight: '280px'
           }"
         >
           <Tabs
