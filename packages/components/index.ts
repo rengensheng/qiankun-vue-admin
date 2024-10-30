@@ -1,6 +1,7 @@
 export {
   message,
   Input,
+  InputNumber,
   Button,
   Layout,
   LayoutHeader,
@@ -12,8 +13,26 @@ export {
   SubMenu,
   Breadcrumb,
   BreadcrumbItem,
-  Tabs,
   TabPane,
+  Tabs,
+  Table,
+  Popconfirm,
+  Pagination,
+  Modal,
+  Form,
+  FormItem,
+  Checkbox,
+  CheckboxGroup,
+  Select,
+  Space,
+  Radio,
+  RadioGroup,
+  RadioButton,
+  TreeSelect,
+} from 'ant-design-vue'
+
+export type {
+  PaginationProps
 } from 'ant-design-vue'
 
 
