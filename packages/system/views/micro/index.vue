@@ -34,7 +34,7 @@ onMounted(async () => {
   const menuList = await getMenuListFlatten();
   menuList.forEach((menu) => {
     if (menu.path === route.fullPath) {
-      console.log("loadMicroApp", menu);
+      console.log('menu', menu);
       microApp.value = loadMicroApp({
         name: menu.name,
         entry: menu.component,
@@ -42,16 +42,20 @@ onMounted(async () => {
         props: {
           menu: menu,
         },
+        
+      }, {
+        getPublicPath(entry: any) {
+          return entry.substring(0, entry.lastIndexOf("/") + 1).replace('micro/', '');
+        },
       });
     }
   });
 });
 onUnmounted(() => {
   microApp.value?.unmount();
-})
+});
 </script>
 
 <template>
-  <div>微服务页面</div>
   <div id="sub-app-container"></div>
 </template>

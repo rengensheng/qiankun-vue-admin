@@ -8,8 +8,6 @@ import {
   LayoutHeader,
   LayoutSider,
   LayoutContent,
-  Breadcrumb,
-  BreadcrumbItem,
   Tabs,
   TabPane,
 } from "@packages/components";
@@ -69,7 +67,7 @@ function handleSelectMenu(menu: any) {
   }
   addTab(menu.key);
 }
-async function addTab(key) {
+async function addTab(key: string) {
   if (openPanes.value.some((pane) => pane.key === key)) {
     activePaneKey.value = key;
     return;
@@ -81,7 +79,7 @@ async function addTab(key) {
   }
   openPanes.value.push(menuInfo);
 }
-function deleteTab(key) {
+function deleteTab(key: any) {
   const index = openPanes.value.findIndex((pane) => pane.key === key);
   openPanes.value.splice(index, 1);
   if (activePaneKey.value === key) {
@@ -93,7 +91,7 @@ function deleteTab(key) {
     router.push(activePaneKey.value);
   }
 }
-function handleChangeTab(key) {
+function handleChangeTab(key: any) {
   activePaneKey.value = key;
   router.push(key);
 }

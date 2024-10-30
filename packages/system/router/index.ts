@@ -12,7 +12,7 @@ const routes: RouteRecordRaw[] = [
     name: 'BaseLayout',
     component: () => import('../views/layouts/index.vue'),
     children: [{
-      path: '/micro/:name',
+      path: '/micro/:appName/:name',
       name: 'MicroChild',
       component: () => import('../views/micro/index.vue')
     }]
