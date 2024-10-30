@@ -172,7 +172,7 @@ function handleChangeTab(key: any) {
             >
             </TabPane>
           </Tabs>
-          <router-view />
+          <router-view :key="activePaneKey" />
         </LayoutContent>
       </Layout>
     </Layout>
