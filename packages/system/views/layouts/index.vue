@@ -23,15 +23,16 @@ const openPanes = ref<any[]>([]);
 const activePaneKey = ref<string>("");
 
 watchEffect(() => {
-  if (currentSelectedMenuKeys.value.length === 0) {
-    handleSelectMenu({ key: route.fullPath });
+  if (userStore.menuList.length > 0) {
+    if (currentSelectedMenuKeys.value.length === 0) {
+      handleSelectMenu({ key: route.fullPath });
+    }
+    currentSelectedMenuKeys.value = [route.fullPath];
+    activePaneKey.value = route.fullPath;
   }
-  currentSelectedMenuKeys.value = [route.fullPath];
-  activePaneKey.value = route.fullPath;
 });
 
 function findMenuInfo(key: string) {
-  console.log(key, userStore.menuList)
   for (let i = 0; i < userStore.menuList.length; i++) {
     const item = userStore.menuList[i];
     if (item.children && item.children.length) {
@@ -73,7 +74,7 @@ async function addTab(key: string) {
     return;
   }
   const menuInfo = findMenuInfo(key);
-  console.log('findMenuInfo', menuInfo)
+  console.log("findMenuInfo", menuInfo);
   if (!menuInfo) {
     return;
   }
