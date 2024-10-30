@@ -7,6 +7,7 @@
     "dev:dev": "vite -m development",
     "dev:prod": "vite -m production",
     "dev": "vite -m development",
+    "start:all": "pnpm --filter {projects/**}... run dev",
     "start:rp": "pnpm --filter react-project run dev",
     "start:sp": "pnpm --filter sub-project run dev",
     "bootstrap": "pnpm install",
