@@ -18,5 +18,6 @@
   "workbench.editor.wrapTabs": true,
   "editor.suggest.snippetsPreventQuickSuggestions": false,
   "aiXcoder.showTrayIcon": true,
-  "git-merge-to-test.mregeToBranch": "test"
+  "git-merge-to-test.mregeToBranch": "test",
+  "nuxt.isNuxtApp": false
 }
