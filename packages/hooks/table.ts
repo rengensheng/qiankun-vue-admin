@@ -7,16 +7,19 @@ import type { PaginationProps } from '@packages/components'
 export type TableOptionType = {
   name: string
   api: string
+  pageNo?: number
+  pageSize?: number
   createCheck?: (record: Partial<ApiBase>) => boolean
   updateCheck?: (record: Partial<ApiBase>) => boolean
+  parseList?: (list: any[]) => any[]
 }
 
 export function useTable<T extends ApiBase>(option: TableOptionType) {
-  const openModel = ref(false)
+  const openModal = ref(false)
   const editRow = ref<T>({} as any)
   const pagination = ref<PaginationProps>({
-    current: 1,
-    pageSize: 10,
+    current: option.pageNo || 1,
+    pageSize: option.pageSize || 10,
     total: 0,
     onChange: (page: number, pageSize: number) => {
       pagination.value.current = page
@@ -34,7 +37,11 @@ export function useTable<T extends ApiBase>(option: TableOptionType) {
         query: searchParams.value
       })
       if (listResp.result) {
-        dataSource.value = listResp.result.items || []
+        if (option.parseList && listResp.result.items) {
+          dataSource.value = option.parseList(listResp.result.items)
+        } else {
+          dataSource.value = listResp.result.items || []
+        }
         pagination.value.total = listResp.result.total
       }
     } catch (e) {
@@ -85,12 +92,12 @@ export function useTable<T extends ApiBase>(option: TableOptionType) {
 
   function handleOpenCreate() {
     editRow.value = {}
-    openModel.value = true
+    openModal.value = true
   }
 
   function handleOpenEdit(record: T) {
     editRow.value = { ...record }
-    openModel.value = true
+    openModal.value = true
   }
 
   function handleSave() {
@@ -108,7 +115,7 @@ export function useTable<T extends ApiBase>(option: TableOptionType) {
   return {
     dataSource,
     pagination,
-    openModel,
+    openModal,
     editRow,
     handleSeach,
     handleGetList,

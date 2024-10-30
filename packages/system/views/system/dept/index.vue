@@ -21,14 +21,14 @@ import { ref } from 'vue'
 const {
   dataSource,
   pagination,
-  openModel,
+  openModal,
   editRow,
   handleDelete,
   handleOpenCreate,
   handleOpenEdit,
   handleSave
 } = useTable<DeptType>({
-  name: '部门管理',
+  name: '部门',
   api: 'dept'
 })
 const deptTreeOptions = ref<DictOption[]>([])
@@ -109,7 +109,7 @@ loadDict()
     </div>
   </div>
   <Modal
-    v-model:open="openModel"
+    v-model:open="openModal"
     title="部门信息"
     @ok="handleSave"
   >

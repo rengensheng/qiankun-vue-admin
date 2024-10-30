@@ -11,21 +11,20 @@ import {
   Space,
   message
 } from '@packages/components'
-import type { PaginationProps } from '@packages/components'
-import { getRoleList, deleteRole, createRole, updateRole } from '@packages/api/role'
-import { ref, watchEffect } from 'vue'
 import { RoleType } from '@packages/types'
-const dataSource = ref<RoleType[]>([])
-const openModal = ref<boolean>(false)
-const editRecord = ref<any>()
-const pagination = ref<PaginationProps>({
-  current: 1,
-  pageSize: 10,
-  total: 0,
-  onChange: (page: number, pageSize: number) => {
-    pagination.value.current = page
-    pagination.value.pageSize = pageSize
-  }
+import { useTable } from '@packages/hooks'
+const {
+  dataSource,
+  pagination,
+  openModal,
+  editRow,
+  handleDelete,
+  handleOpenCreate,
+  handleOpenEdit,
+  handleSave
+} = useTable<RoleType>({
+  name: '角色',
+  api: 'role'
 })
 const columns = [
   {
@@ -49,57 +48,6 @@ const columns = [
     dataIndex: 'action'
   }
 ]
-async function getList() {
-  const res = await getRoleList(pagination.value.current, pagination.value.pageSize)
-  if (res.result && res.result.items) {
-    dataSource.value = res.result.items
-    pagination.value.total = res.result.total
-  }
-}
-function handleOpenCreateUser() {
-  editRecord.value = {}
-  openModal.value = true
-}
-function handleOpenEditUser(record: RoleType) {
-  editRecord.value = { ...record }
-  openModal.value = true
-}
-function handleSaveUser() {
-  if (editRecord.value.id) {
-    handleUpdate(editRecord.value)
-  } else {
-    handleCreate(editRecord.value)
-  }
-}
-function handleCreate(record: RoleType) {
-  createRole(record)
-    .then(() => {
-      openModal.value = false
-      getList()
-      message.success('创建成功')
-    })
-    .catch((e) => {
-      message.error(e.message)
-    })
-}
-function handleUpdate(record: RoleType) {
-  updateRole(record)
-    .then(() => {
-      openModal.value = false
-      getList()
-      message.success('编辑成功')
-    })
-    .catch((e) => {
-      message.error(e.message)
-    })
-}
-async function handleDelete(record: RoleType) {
-  await deleteRole(record.id)
-  getList()
-}
-watchEffect(() => {
-  getList()
-})
 </script>
 
 <template>
@@ -110,7 +58,7 @@ watchEffect(() => {
     <div class="py-2">
       <Button
         type="primary"
-        @click="handleOpenCreateUser"
+        @click="handleOpenCreate"
         >新建角色</Button
       >
     </div>
@@ -122,11 +70,11 @@ watchEffect(() => {
       <template #bodyCell="{ column, text, record }">
         <template v-if="column.dataIndex === 'action'">
           <Space>
-            <a @click="handleOpenEditUser(record as any)">编辑</a>
+            <a @click="handleOpenEdit(record as RoleType)">编辑</a>
             <Popconfirm
               v-if="dataSource.length"
               title="确认删除吗?"
-              @confirm="handleDelete(record as any)"
+              @confirm="handleDelete(record.id)"
             >
               <a>删除</a>
             </Popconfirm>
@@ -153,10 +101,10 @@ watchEffect(() => {
   <Modal
     v-model:open="openModal"
     title="用户信息"
-    @ok="handleSaveUser"
+    @ok="handleSave"
   >
     <Form
-      :model="editRecord"
+      :model="editRow"
       :label-col="{ span: 6 }"
       :wrapper-col="{ span: 14 }"
       autocomplete="off"
@@ -167,7 +115,7 @@ watchEffect(() => {
         :rules="[{ required: true, message: '请输入角色名!' }]"
       >
         <Input
-          v-model:value="editRecord.roleName"
+          v-model:value="editRow.roleName"
           placeholder="请输入角色名"
         />
       </FormItem>
@@ -177,7 +125,7 @@ watchEffect(() => {
         :rules="[{ required: true, message: '请输入角色值!' }]"
       >
         <Input
-          v-model:value="editRecord.roleValue"
+          v-model:value="editRow.roleValue"
           placeholder="请输入角色值"
         />
       </FormItem>
@@ -186,7 +134,7 @@ watchEffect(() => {
         name="remark"
       >
         <Input.TextArea
-          v-model:value="editRecord.remark"
+          v-model:value="editRow.remark"
           placeholder="请输入备注"
         />
       </FormItem>
