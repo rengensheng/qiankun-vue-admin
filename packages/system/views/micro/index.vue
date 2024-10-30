@@ -46,6 +46,7 @@ onMounted(async () => {
           }
         },
         {
+          sandbox: { strictStyleIsolation: true },
           getPublicPath(entry: any) {
             return entry.substring(0, entry.lastIndexOf('/') + 1).replace('micro/', '')
           }
