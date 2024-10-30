@@ -1,10 +1,9 @@
 import { createApp } from 'vue'
 import { renderWithQiankun, qiankunWindow } from 'vite-plugin-qiankun/dist/helper';
 import './style.css'
+import getRouter from "./router"
 import App from './App.vue'
 
-
-// some code
 renderWithQiankun({
   mount(props) {
     console.log('mount');
@@ -29,11 +28,15 @@ if (!qiankunWindow.__POWERED_BY_QIANKUN__) {
 }
 
 function render(props: any) {
-  console.log('render', props);
   if (!props.container) {
-    console.log("here")
-    createApp(App).mount('#app');
+    const app = createApp(App)
+    const router = getRouter("/micro/sub1/");
+    app.use(router);
+    app.mount('#app');
   } else {
-    createApp(App).mount(props.container);
+    const app = createApp(App)
+    const router = getRouter(props.menu.path.substring(0, props.menu.path.lastIndexOf('/') + 1));
+    app.use(router);
+    app.mount(props.container);
   }
 }

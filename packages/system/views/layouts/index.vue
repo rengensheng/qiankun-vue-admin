@@ -8,8 +8,6 @@ import {
   LayoutHeader,
   LayoutSider,
   LayoutContent,
-  Breadcrumb,
-  BreadcrumbItem,
   Tabs,
   TabPane,
 } from "@packages/components";
@@ -25,15 +23,16 @@ const openPanes = ref<any[]>([]);
 const activePaneKey = ref<string>("");
 
 watchEffect(() => {
-  if (currentSelectedMenuKeys.value.length === 0) {
-    handleSelectMenu({ key: route.fullPath });
+  if (userStore.menuList.length > 0) {
+    if (currentSelectedMenuKeys.value.length === 0) {
+      handleSelectMenu({ key: route.fullPath });
+    }
+    currentSelectedMenuKeys.value = [route.fullPath];
+    activePaneKey.value = route.fullPath;
   }
-  currentSelectedMenuKeys.value = [route.fullPath];
-  activePaneKey.value = route.fullPath;
 });
 
 function findMenuInfo(key: string) {
-  console.log(key, userStore.menuList)
   for (let i = 0; i < userStore.menuList.length; i++) {
     const item = userStore.menuList[i];
     if (item.children && item.children.length) {
@@ -69,19 +68,19 @@ function handleSelectMenu(menu: any) {
   }
   addTab(menu.key);
 }
-async function addTab(key) {
+async function addTab(key: string) {
   if (openPanes.value.some((pane) => pane.key === key)) {
     activePaneKey.value = key;
     return;
   }
   const menuInfo = findMenuInfo(key);
-  console.log('findMenuInfo', menuInfo)
+  console.log("findMenuInfo", menuInfo);
   if (!menuInfo) {
     return;
   }
   openPanes.value.push(menuInfo);
 }
-function deleteTab(key) {
+function deleteTab(key: any) {
   const index = openPanes.value.findIndex((pane) => pane.key === key);
   openPanes.value.splice(index, 1);
   if (activePaneKey.value === key) {
@@ -93,7 +92,7 @@ function deleteTab(key) {
     router.push(activePaneKey.value);
   }
 }
-function handleChangeTab(key) {
+function handleChangeTab(key: any) {
   activePaneKey.value = key;
   router.push(key);
 }
