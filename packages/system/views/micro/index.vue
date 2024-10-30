@@ -37,7 +37,7 @@ onMounted(async () => {
     if (menu.path === route.fullPath) {
       console.log('menu', menu);
       microApp.value = loadMicroApp({
-        name: route.params.appName,
+        name: route.params.appName as string,
         entry: menu.component,
         container: "#sub-app-container",
         props: {

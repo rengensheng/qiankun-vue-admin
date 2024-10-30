@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+// import react from '@vitejs/plugin-react'
 import qiankun from 'vite-plugin-qiankun';
 
 // https://vite.dev/config/
@@ -7,11 +7,11 @@ const useDevMode = true
 export default defineConfig({
   plugins: [
     // react(),
-    qiankun('微服务页面2', { useDevMode: useDevMode })
+    qiankun('sub2', { useDevMode: useDevMode })
   ],
-  base: '/micro/sub1/second',
+  base: '/micro/sub2/',
   server: {
-    port: 5174,
-    origin: 'http://localhost:5174',
+    port: 5802,
+    origin: 'http://localhost:5802',
   }
 })
