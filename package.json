@@ -7,6 +7,9 @@
     "dev:dev": "vite -m development",
     "dev:prod": "vite -m production",
     "dev": "vite -m development",
+    "start:rp": "pnpm --filter react-project run dev",
+    "start:sp": "pnpm --filter sub-project run dev",
+    "bootstrap": "pnpm install",
     "build": "vue-tsc -b && vite build",
     "preview": "vite preview"
   },
@@ -20,6 +23,10 @@
   "devDependencies": {
     "@types/node": "^22.8.2",
     "@vitejs/plugin-vue": "^5.1.4",
+    "eslint": "^9.13.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "prettier": "^3.3.3",
     "typescript": "~5.6.2",
     "vite": "^5.4.9",
     "vue-tsc": "^2.1.6"
