@@ -12,7 +12,7 @@ let ReactDOM: Root;
 
 function render(props: QiankunProps) {
   const { container } = props;
-  const containerElement = container ? container.querySelector('#root') : document.querySelector('#root')
+  const containerElement = container ? container : document.querySelector('#root')
   ReactDOM = createRoot(containerElement!)
   ReactDOM.render(
     <StrictMode>

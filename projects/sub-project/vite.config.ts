@@ -6,6 +6,7 @@ export default defineConfig({
   plugins: [vue(), qiankun('sub1', { useDevMode: true }),],
   base: '/micro/sub1/',
   server: {
-    origin: 'http://localhost:5174'
+    port: 5801,
+    origin: 'http://localhost:5801'
   }
 })
