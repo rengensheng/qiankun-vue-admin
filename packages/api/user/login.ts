@@ -11,3 +11,10 @@ export function userLogin(username: string, password: string) {
 export function getUserInfo() {
   return postAction<UserLoginRes>('/api/user/getUserInfo', {})
 }
+
+export function changePassword(oldPassword: string, newPassword: string) {
+  return postAction<UserLoginRes>('/api/user/password', {
+    oldPassword,
+    newPassword
+  })
+}

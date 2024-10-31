@@ -63,10 +63,11 @@ watchEffect(() => {
             v-show="!formItem.hidden"
             :disabled="formItem.disabled"
             :readonly="formItem.readonly"
+            :type="formItem.type === 'password' ? 'password' : 'text'"
             :allow-clear="formItem.clearable"
             v-model:value="editRow[formItem.field]"
             :placeholder="formItem.placeholder || '请输入'"
-            v-if="formItem.type === 'input'"
+            v-if="formItem.type === 'input' || formItem.type === 'password'"
           />
           <Input.TextArea
             v-show="!formItem.hidden"

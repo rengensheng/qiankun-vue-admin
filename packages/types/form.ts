@@ -3,6 +3,7 @@ import { DictOption } from './dict'
 export type FormOption = {
   type:
     | 'input'
+    | 'password'
     | 'textarea'
     | 'select'
     | 'inputNumber'
