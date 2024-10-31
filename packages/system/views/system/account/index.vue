@@ -27,10 +27,6 @@ const columns = [
     dataIndex: 'createdTime'
   },
   {
-    title: '备注',
-    dataIndex: 'remark'
-  },
-  {
     title: '操作',
     dataIndex: 'action'
   }

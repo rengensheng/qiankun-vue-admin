@@ -7,6 +7,7 @@ export type RoleType = {
   roleName: string
   roleValue: string
   status: string
+  menu: string
   updatedBy: string
   updatedTime: string
 }
