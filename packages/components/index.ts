@@ -28,7 +28,8 @@ export {
   Radio,
   RadioGroup,
   RadioButton,
-  TreeSelect
+  TreeSelect,
+  ConfigProvider
 } from 'ant-design-vue'
 
 export type { PaginationProps } from 'ant-design-vue'
