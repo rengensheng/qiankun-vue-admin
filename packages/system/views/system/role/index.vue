@@ -4,6 +4,7 @@ import { FormOption, RoleType } from '@packages/types'
 import { useTable, useForm } from '@packages/hooks'
 const { register, getFormValues } = useForm<RoleType>()
 const {
+  loading,
   dataSource,
   pagination,
   openModal,
@@ -76,6 +77,7 @@ const formOptions: FormOption[] = [
       :columns="columns"
       :dataSource="dataSource"
       :pagination="false"
+      :loading="loading"
     >
       <template #bodyCell="{ column, text, record }">
         <template v-if="column.dataIndex === 'action'">
@@ -112,6 +114,7 @@ const formOptions: FormOption[] = [
     v-model:open="openModal"
     title="用户信息"
     @ok="handleSave"
+    :confirm-loading="loading"
   >
     <UseForm
       :editRow="editRow"

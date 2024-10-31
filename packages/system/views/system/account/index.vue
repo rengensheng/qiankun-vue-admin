@@ -83,6 +83,7 @@ const formOptions: FormOption[] = [
 const { register, getFormValues } = useForm<AccountType>()
 
 const {
+  loading,
   dataSource,
   pagination,
   openModal,
@@ -112,6 +113,7 @@ loadDict()
       >
     </div>
     <Table
+      :loading="loading"
       :columns="columns"
       :dataSource="dataSource"
       :pagination="false"
@@ -151,6 +153,7 @@ loadDict()
     v-model:open="openModal"
     title="用户信息"
     @ok="handleSave"
+    :confirm-loading="loading"
   >
     <UseForm
       :edit-row="editRow"

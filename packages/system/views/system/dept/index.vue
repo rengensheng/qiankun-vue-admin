@@ -42,6 +42,7 @@ const formOptions: FormOption[] = [
 ]
 const { register, getFormValues } = useForm<DeptType>()
 const {
+  loading,
   dataSource,
   pagination,
   openModal,
@@ -99,6 +100,7 @@ loadDict()
       :columns="columns"
       :dataSource="dataSource"
       :pagination="false"
+      :loading="loading"
     >
       <template #bodyCell="{ column, text, record }">
         <template v-if="column.dataIndex === 'action'">
@@ -135,6 +137,7 @@ loadDict()
     v-model:open="openModal"
     title="部门信息"
     @ok="handleSave"
+    :confirm-loading="loading"
   >
     <UseForm
       :edit-row="editRow"

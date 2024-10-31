@@ -20,6 +20,7 @@ export type TableOptionType = {
 export function useTable<T extends ApiBase>(option: TableOptionType) {
   const openModal = ref(false)
   const editRow = ref<T>({} as any)
+  const loading = ref<boolean>(false)
   const pagination = ref<PaginationProps>({
     current: option.pageNo || 1,
     pageSize: option.pageSize || 10,
@@ -34,6 +35,7 @@ export function useTable<T extends ApiBase>(option: TableOptionType) {
 
   async function handleGetList() {
     try {
+      loading.value = true
       const listResp = await postAction<ApiListType<T>>(`/api/${option.api}/list`, {
         pageNo: pagination.value.current,
         pageSize: pagination.value.pageSize,
@@ -50,18 +52,23 @@ export function useTable<T extends ApiBase>(option: TableOptionType) {
     } catch (e) {
       console.error(e)
       message.error(`获取${option.name}列表失败`)
+    } finally {
+      loading.value = false
     }
   }
 
   async function handleUpdate(record: Partial<T>) {
     if (!option.updateCheck || option.updateCheck(record)) {
       try {
+        loading.value = true
         await postAction<T>(`/api/${option.api}/update/${record.id}`, record)
         handleCancel()
         handleGetList()
       } catch (e) {
         console.error(e)
         message.error(`更新${option.name}失败`)
+      } finally {
+        loading.value = false
       }
     } else {
       message.error(`参数校验失败`)
@@ -71,12 +78,15 @@ export function useTable<T extends ApiBase>(option: TableOptionType) {
   async function handleCreate(record: Partial<T>) {
     if (!option.createCheck || option.createCheck(record)) {
       try {
+        loading.value = true
         await postAction<T>(`/api/${option.api}/create`, record)
         handleCancel()
         handleGetList()
       } catch (e) {
         console.error(e)
         message.error(`创建${option.name}失败`)
+      } finally {
+        loading.value = false
       }
     } else {
       message.error(`参数校验失败`)
@@ -85,11 +95,14 @@ export function useTable<T extends ApiBase>(option: TableOptionType) {
 
   async function handleDelete(id: string) {
     try {
+      loading.value = true
       await postAction<string>(`/api/${option.api}/delete/${id}`)
       handleGetList()
     } catch (e) {
       console.error(e)
       message.error(`删除${option.name}失败`)
+    } finally {
+      loading.value = false
     }
   }
 
@@ -137,6 +150,7 @@ export function useTable<T extends ApiBase>(option: TableOptionType) {
   })
 
   return {
+    loading,
     dataSource,
     pagination,
     openModal,
