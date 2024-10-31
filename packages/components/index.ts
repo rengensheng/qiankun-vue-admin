@@ -35,7 +35,8 @@ export {
   DatePicker,
   RangePicker,
   TimePicker,
-  Tree
+  Tree,
+  Tag
 } from 'ant-design-vue'
 
 export { default as UseForm } from './components/UseForm.vue'

@@ -1,6 +1,6 @@
 import { onMounted, ref, watchEffect } from 'vue'
 import { postAction } from '@packages/api/utils/request'
-import { ApiBase, ApiListType } from '@packages/types'
+import { ApiBase, ApiListType, FormOption } from '@packages/types'
 import { message } from '@packages/components'
 import type { PaginationProps } from '@packages/components'
 
@@ -11,6 +11,9 @@ export type TableOptionType = {
   pageSize?: number
   outHeight?: number
   outWidth?: number
+  sortItem?: string
+  sortType?: string
+  formOptions?: FormOption[]
   createCheck?: (record: Partial<ApiBase>) => boolean
   updateCheck?: (record: Partial<ApiBase>) => boolean
   getValues?: () => Promise<Partial<ApiBase>>
@@ -39,10 +42,18 @@ export function useTable<T extends ApiBase>(option: TableOptionType) {
   async function handleGetList() {
     try {
       loading.value = true
+      const sortParams: Record<string, string> = {}
+      if (option.sortItem) {
+        sortParams.sortItem = option.sortItem
+      }
+      if (option.sortType) {
+        sortParams.sortType = option.sortType
+      }
       const listResp = await postAction<ApiListType<T>>(`/api/${option.api}/list`, {
         pageNo: pagination.value.current,
         pageSize: pagination.value.pageSize,
-        query: searchParams.value
+        query: searchParams.value,
+        ...sortParams
       })
       if (listResp.result) {
         if (option.parseList && listResp.result.items) {
@@ -118,6 +129,13 @@ export function useTable<T extends ApiBase>(option: TableOptionType) {
       await option.resetValues()
     }
     editRow.value = {}
+    if (option.formOptions) {
+      option.formOptions.forEach((item) => {
+        if (item.defaultValue) {
+          editRow.value[item.field] = item.defaultValue
+        }
+      })
+    }
     openModal.value = true
   }
 

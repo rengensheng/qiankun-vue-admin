@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Table, Popconfirm, Button, Modal, Space } from '@packages/components'
+import { Table, Popconfirm, Button, Modal, Space, Tag } from '@packages/components'
 import { useDict, useForm, useTable } from '@packages/hooks'
 import { ref } from 'vue'
 import { DictOption, FormOption, MenuType } from '@packages/types'
@@ -41,6 +41,7 @@ const formOptions: FormOption[] = [
     field: 'status',
     name: '状态',
     type: 'radioButton',
+    defaultValue: '0',
     options: [
       { label: '启用', value: '0' },
       { label: '禁用', value: '1' }
@@ -51,6 +52,7 @@ const formOptions: FormOption[] = [
     field: 'isExt',
     name: '是否外链',
     type: 'radioButton',
+    defaultValue: '0',
     options: [
       { label: '否', value: '0' },
       { label: '是', value: '1' }
@@ -61,6 +63,7 @@ const formOptions: FormOption[] = [
     field: 'keepalive',
     name: '是否缓存',
     type: 'radioButton',
+    defaultValue: '0',
     options: [
       { label: '否', value: '0' },
       { label: '是', value: '1' }
@@ -71,6 +74,7 @@ const formOptions: FormOption[] = [
     field: 'show',
     name: '是否显示',
     type: 'radioButton',
+    defaultValue: '0',
     options: [
       { label: '否', value: '0' },
       { label: '是', value: '1' }
@@ -99,6 +103,9 @@ const {
   name: '菜单',
   api: 'menu',
   pageSize: 10000,
+  sortItem: 'order_no',
+  sortType: 'asc',
+  formOptions,
   parseList: parseMenuList,
   getValues: getFormValues
 })
@@ -168,7 +175,12 @@ loadDict()
       :scroll="scroll"
     >
       <template #bodyCell="{ column, text, record }">
-        <template v-if="column.dataIndex === 'action'">
+        <template v-if="column.dataIndex === 'status'">
+          <Tag :color="text === '0' ? 'green' : 'red'">
+            {{ text === '0' ? '是' : '否' }}
+          </Tag>
+        </template>
+        <template v-else-if="column.dataIndex === 'action'">
           <Space>
             <a @click="handleOpenEdit(record as MenuType)">编辑</a>
             <Popconfirm

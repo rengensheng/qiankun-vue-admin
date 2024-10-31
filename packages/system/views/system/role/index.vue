@@ -191,6 +191,7 @@ parseMenuList()
         <Tree
           :tree-data="menuTreeData"
           checkable
+          checkStrictly
           v-model:checkedKeys="checkMenuKeys"
         />
       </div>

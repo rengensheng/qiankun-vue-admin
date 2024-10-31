@@ -1,5 +1,14 @@
 <script setup lang="ts">
-import { Table, Popconfirm, Pagination, Button, Modal, Space, UseForm } from '@packages/components'
+import {
+  Table,
+  Popconfirm,
+  Pagination,
+  Button,
+  Modal,
+  Space,
+  UseForm,
+  Tag
+} from '@packages/components'
 import type { DeptType, DictOption, FormOption } from '@packages/types'
 import { useForm, useTable } from '@packages/hooks'
 import { useDict } from '@packages/hooks'
@@ -22,6 +31,7 @@ const formOptions: FormOption[] = [
     field: 'status',
     name: '是否启用',
     type: 'radioButton',
+    defaultValue: '0',
     options: [
       { label: '是', value: '0' },
       { label: '否', value: '1' }
@@ -55,6 +65,7 @@ const {
 } = useTable<DeptType>({
   name: '部门',
   api: 'dept',
+  formOptions,
   getValues: getFormValues
 })
 const columns = [
@@ -105,7 +116,12 @@ loadDict()
       :scroll="scroll"
     >
       <template #bodyCell="{ column, text, record }">
-        <template v-if="column.dataIndex === 'action'">
+        <template v-if="column.dataIndex === 'status'">
+          <Tag :color="text === '0' ? 'green' : 'red'">
+            {{ text === '0' ? '是' : '否' }}
+          </Tag>
+        </template>
+        <template v-else-if="column.dataIndex === 'action'">
           <Space>
             <a @click="handleOpenEdit(record as DeptType)">编辑</a>
             <Popconfirm

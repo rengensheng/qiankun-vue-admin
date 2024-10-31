@@ -26,7 +26,7 @@ async function handleLogin() {
       if (userStore.menuList.length === 0) {
         await loadMenu(router)
       }
-      router.replace('/')
+      router.replace('/dashboard/analysis')
     } else {
       message.error(userResp.message)
     }

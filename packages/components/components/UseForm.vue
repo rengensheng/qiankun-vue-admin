@@ -79,6 +79,7 @@ watchEffect(() => {
           />
           <Select
             v-show="!formItem.hidden"
+            style="width: 100%"
             :disabled="formItem.disabled"
             :readonly="formItem.readonly"
             :allow-clear="formItem.clearable"
@@ -89,6 +90,7 @@ watchEffect(() => {
           />
           <InputNumber
             v-show="!formItem.hidden"
+            style="width: 100%"
             :disabled="formItem.disabled"
             :readonly="formItem.readonly"
             :allow-clear="formItem.clearable"
