@@ -23,6 +23,7 @@ const {
   pagination,
   openModal,
   editRow,
+  handleGetList,
   handleDelete,
   handleOpenCreate,
   handleOpenEdit,
@@ -70,7 +71,11 @@ const formOptions: FormOption[] = [
   }
 ]
 const menuTreeData = ref<any[]>([])
-const checkMenuKeys = ref<string[]>([])
+const checkMenuKeys = ref<{
+  checked: string[]
+}>({
+  checked: []
+})
 const selectedRowKeys = ref<string[]>([])
 const selectedRow = ref<RoleType>()
 async function parseMenuList() {
@@ -95,11 +100,11 @@ function onSelectChange(rowKeys: any[], selectRows: any[]) {
     selectedRowKeys.value = [selectedRowKeys.value[0]]
   }
   selectedRow.value = undefined
-  checkMenuKeys.value = []
+  checkMenuKeys.value.checked = []
   selectRows.forEach((row) => {
     if (selectedRowKeys.value.includes(row.id)) {
       selectedRow.value = row
-      checkMenuKeys.value = row.menu.split(',')
+      checkMenuKeys.value.checked = row.menu.split(',')
     }
   })
 }
@@ -108,8 +113,9 @@ async function handleSaveMenu() {
     loading.value = true
     await saveRoleMenu({
       ...selectedRow.value,
-      menu: checkMenuKeys.value.join(',')
+      menu: checkMenuKeys.value.checked.join(',')
     })
+    handleGetList()
     message.success('保存菜单成功')
   } catch (error: any) {
     console.error(error.message)
@@ -192,7 +198,7 @@ parseMenuList()
           :tree-data="menuTreeData"
           checkable
           checkStrictly
-          v-model:checkedKeys="checkMenuKeys"
+          v-model:checkedKeys="checkMenuKeys as any"
         />
       </div>
     </div>
