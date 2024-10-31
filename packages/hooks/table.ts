@@ -11,6 +11,9 @@ export type TableOptionType = {
   pageSize?: number
   createCheck?: (record: Partial<ApiBase>) => boolean
   updateCheck?: (record: Partial<ApiBase>) => boolean
+  getValues?: () => Promise<Partial<ApiBase>>
+  resetValues?: () => Promise<any>
+  setValues?: (record: Partial<ApiBase>) => Promise<any>
   parseList?: (list: any[]) => any[]
 }
 
@@ -54,6 +57,8 @@ export function useTable<T extends ApiBase>(option: TableOptionType) {
     if (!option.updateCheck || option.updateCheck(record)) {
       try {
         await postAction<T>(`/api/${option.api}/update/${record.id}`, record)
+        handleCancel()
+        handleGetList()
       } catch (e) {
         console.error(e)
         message.error(`更新${option.name}失败`)
@@ -67,6 +72,7 @@ export function useTable<T extends ApiBase>(option: TableOptionType) {
     if (!option.createCheck || option.createCheck(record)) {
       try {
         await postAction<T>(`/api/${option.api}/create`, record)
+        handleCancel()
         handleGetList()
       } catch (e) {
         console.error(e)
@@ -80,32 +86,50 @@ export function useTable<T extends ApiBase>(option: TableOptionType) {
   async function handleDelete(id: string) {
     try {
       await postAction<string>(`/api/${option.api}/delete/${id}`)
+      handleGetList()
     } catch (e) {
       console.error(e)
       message.error(`删除${option.name}失败`)
     }
   }
 
-  async function handleSeach(params: Record<string, any>) {
+  async function handleSearch(params: Record<string, any>) {
     searchParams.value = params
   }
 
-  function handleOpenCreate() {
+  async function handleOpenCreate() {
+    if (option.resetValues) {
+      await option.resetValues()
+    }
     editRow.value = {}
     openModal.value = true
   }
 
-  function handleOpenEdit(record: T) {
+  async function handleOpenEdit(record: T) {
+    delete record.createdTime
+    delete record.updatedTime
+    if (option.setValues) {
+      await option.setValues(record)
+    }
     editRow.value = { ...record }
     openModal.value = true
   }
 
-  function handleSave() {
+  async function handleSave() {
+    console.log(option.getValues)
+    if (option.getValues) {
+      const formValue = await option.getValues()
+      editRow.value = { ...editRow.value, ...formValue }
+    }
     if (editRow.value.id) {
       handleUpdate(editRow.value)
     } else {
       handleCreate(editRow.value)
     }
+  }
+
+  function handleCancel() {
+    openModal.value = false
   }
 
   watchEffect(() => {
@@ -117,7 +141,7 @@ export function useTable<T extends ApiBase>(option: TableOptionType) {
     pagination,
     openModal,
     editRow,
-    handleSeach,
+    handleSearch,
     handleGetList,
     handleUpdate,
     handleCreate,

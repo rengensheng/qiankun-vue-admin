@@ -1,18 +1,8 @@
 <script setup lang="ts">
-import {
-  Table,
-  Popconfirm,
-  Pagination,
-  Button,
-  Modal,
-  Form,
-  FormItem,
-  Input,
-  Space,
-  message
-} from '@packages/components'
-import { RoleType } from '@packages/types'
-import { useTable } from '@packages/hooks'
+import { Table, Popconfirm, Pagination, Button, Modal, Space, UseForm } from '@packages/components'
+import { FormOption, RoleType } from '@packages/types'
+import { useTable, useForm } from '@packages/hooks'
+const { register, getFormValues } = useForm<RoleType>()
 const {
   dataSource,
   pagination,
@@ -24,7 +14,8 @@ const {
   handleSave
 } = useTable<RoleType>({
   name: '角色',
-  api: 'role'
+  api: 'role',
+  getValues: getFormValues
 })
 const columns = [
   {
@@ -46,6 +37,25 @@ const columns = [
   {
     title: '操作',
     dataIndex: 'action'
+  }
+]
+const formOptions: FormOption[] = [
+  {
+    field: 'roleName',
+    name: '角色名',
+    type: 'input',
+    required: true
+  },
+  {
+    field: 'roleValue',
+    name: '角色值',
+    type: 'input',
+    required: true
+  },
+  {
+    field: 'remark',
+    type: 'textarea',
+    name: '备注'
   }
 ]
 </script>
@@ -103,41 +113,10 @@ const columns = [
     title="用户信息"
     @ok="handleSave"
   >
-    <Form
-      :model="editRow"
-      :label-col="{ span: 6 }"
-      :wrapper-col="{ span: 14 }"
-      autocomplete="off"
-    >
-      <FormItem
-        label="角色名"
-        name="roleName"
-        :rules="[{ required: true, message: '请输入角色名!' }]"
-      >
-        <Input
-          v-model:value="editRow.roleName"
-          placeholder="请输入角色名"
-        />
-      </FormItem>
-      <FormItem
-        label="角色值"
-        name="roleValue"
-        :rules="[{ required: true, message: '请输入角色值!' }]"
-      >
-        <Input
-          v-model:value="editRow.roleValue"
-          placeholder="请输入角色值"
-        />
-      </FormItem>
-      <FormItem
-        label="备注"
-        name="remark"
-      >
-        <Input.TextArea
-          v-model:value="editRow.remark"
-          placeholder="请输入备注"
-        />
-      </FormItem>
-    </Form>
+    <UseForm
+      :editRow="editRow"
+      :register="register"
+      :formOptions="formOptions"
+    />
   </Modal>
 </template>

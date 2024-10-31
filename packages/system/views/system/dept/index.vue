@@ -1,23 +1,46 @@
 <script setup lang="ts">
-import {
-  Table,
-  Popconfirm,
-  Pagination,
-  Button,
-  Modal,
-  Form,
-  FormItem,
-  Input,
-  Space,
-  InputNumber,
-  RadioGroup,
-  RadioButton,
-  TreeSelect
-} from '@packages/components'
-import type { DeptType, DictOption } from '@packages/types'
-import { useTable } from '@packages/hooks'
+import { Table, Popconfirm, Pagination, Button, Modal, Space, UseForm } from '@packages/components'
+import type { DeptType, DictOption, FormOption } from '@packages/types'
+import { useForm, useTable } from '@packages/hooks'
 import { useDict } from '@packages/hooks'
 import { ref } from 'vue'
+const deptTreeOptions = ref<DictOption[]>([])
+const formOptions: FormOption[] = [
+  {
+    field: 'deptName',
+    name: '部门名',
+    type: 'input',
+    required: true
+  },
+  {
+    field: 'parentDept',
+    name: '上级部门',
+    type: 'treeSelect',
+    options: deptTreeOptions
+  },
+  {
+    field: 'status',
+    name: '是否启用',
+    type: 'radioButton',
+    options: [
+      { label: '是', value: '0' },
+      { label: '否', value: '1' }
+    ],
+    required: true
+  },
+  {
+    field: 'orderNo',
+    name: '排序',
+    type: 'inputNumber',
+    required: true
+  },
+  {
+    field: 'remark',
+    name: '备注',
+    type: 'textarea'
+  }
+]
+const { register, getFormValues } = useForm<DeptType>()
 const {
   dataSource,
   pagination,
@@ -29,9 +52,9 @@ const {
   handleSave
 } = useTable<DeptType>({
   name: '部门',
-  api: 'dept'
+  api: 'dept',
+  getValues: getFormValues
 })
-const deptTreeOptions = ref<DictOption[]>([])
 const columns = [
   {
     title: '部门名称',
@@ -113,70 +136,10 @@ loadDict()
     title="部门信息"
     @ok="handleSave"
   >
-    <Form
-      :model="editRow"
-      :label-col="{ span: 6 }"
-      :wrapper-col="{ span: 14 }"
-      autocomplete="off"
-    >
-      <FormItem
-        label="部门名"
-        name="deptName"
-        :rules="[{ required: true, message: '请输入部门名!' }]"
-      >
-        <Input
-          v-model:value="editRow.deptName"
-          placeholder="请输入部门名"
-        />
-      </FormItem>
-      <FormItem
-        label="上级部门"
-        name="parentDept"
-      >
-        <TreeSelect
-          v-model:value="editRow.parentDept"
-          style="width: 100%"
-          :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-          placeholder="上级部门"
-          allow-clear
-          tree-default-expand-all
-          :tree-data="deptTreeOptions"
-          tree-node-filter-prop="label"
-        >
-        </TreeSelect>
-      </FormItem>
-      <FormItem
-        label="是否启用"
-        name="status"
-        :rules="[{ required: true, message: '请输入是否启用!' }]"
-      >
-        <RadioGroup
-          v-model:value="editRow.status"
-          button-style="solid"
-        >
-          <RadioButton value="0">是</RadioButton>
-          <RadioButton value="1">否</RadioButton>
-        </RadioGroup>
-      </FormItem>
-      <FormItem
-        label="排序"
-        name="orderNo"
-        :rules="[{ required: true, message: '请输入排序!' }]"
-      >
-        <InputNumber
-          v-model:value="editRow.orderNo"
-          placeholder="请输入排序"
-        />
-      </FormItem>
-      <FormItem
-        label="备注"
-        name="remark"
-      >
-        <Input.TextArea
-          v-model:value="editRow.remark"
-          placeholder="请输入备注"
-        />
-      </FormItem>
-    </Form>
+    <UseForm
+      :edit-row="editRow"
+      :form-options="formOptions"
+      :register="register"
+    />
   </Modal>
 </template>

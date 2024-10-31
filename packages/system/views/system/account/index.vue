@@ -1,32 +1,8 @@
 <script setup lang="ts">
-import {
-  Table,
-  Popconfirm,
-  Pagination,
-  Button,
-  Modal,
-  Form,
-  FormItem,
-  Input,
-  Select,
-  Space
-} from '@packages/components'
-import { useDict, useTable } from '@packages/hooks'
+import { Table, Popconfirm, Pagination, Button, Modal, Space, UseForm } from '@packages/components'
+import { useDict, useForm, useTable } from '@packages/hooks'
 import { ref } from 'vue'
-import { AccountType, DictOption } from '@packages/types'
-const {
-  dataSource,
-  pagination,
-  openModal,
-  editRow,
-  handleDelete,
-  handleOpenCreate,
-  handleOpenEdit,
-  handleSave
-} = useTable<AccountType>({
-  name: '用户',
-  api: 'user'
-})
+import { AccountType, DictOption, FormOption } from '@packages/types'
 const roleOptions = ref<DictOption[]>([])
 const deptOptions = ref<DictOption[]>([])
 const columns = [
@@ -59,10 +35,67 @@ const columns = [
     dataIndex: 'action'
   }
 ]
+
 async function loadDict() {
   roleOptions.value = await useDict('/api/role/list', 'roleName', 'roleValue')
   deptOptions.value = await useDict('/api/dept/list', 'deptName', 'id')
 }
+
+const formOptions: FormOption[] = [
+  {
+    field: 'account',
+    name: '账户名',
+    type: 'input',
+    required: true
+  },
+  {
+    field: 'role',
+    name: '角色',
+    type: 'select',
+    options: roleOptions,
+    required: true
+  },
+  {
+    field: 'dept',
+    name: '所属部门',
+    options: deptOptions,
+    type: 'select'
+  },
+  {
+    field: 'nickname',
+    name: '昵称',
+    type: 'input',
+    required: true
+  },
+  {
+    field: 'email',
+    name: '邮箱',
+    type: 'input',
+    required: true
+  },
+  {
+    field: 'remark',
+    name: '备注',
+    type: 'textarea'
+  }
+]
+
+const { register, getFormValues } = useForm<AccountType>()
+
+const {
+  dataSource,
+  pagination,
+  openModal,
+  editRow,
+  handleDelete,
+  handleOpenCreate,
+  handleOpenEdit,
+  handleSave
+} = useTable<AccountType>({
+  name: '用户',
+  api: 'user',
+  getValues: getFormValues
+})
 loadDict()
 </script>
 
@@ -119,72 +152,10 @@ loadDict()
     title="用户信息"
     @ok="handleSave"
   >
-    <Form
-      :model="editRow"
-      :label-col="{ span: 6 }"
-      :wrapper-col="{ span: 14 }"
-      autocomplete="off"
-    >
-      <FormItem
-        label="账户名"
-        name="account"
-        :rules="[{ required: true, message: '请输入账户名!' }]"
-      >
-        <Input
-          v-model:value="editRow.account"
-          placeholder="请输入账户名"
-        />
-      </FormItem>
-      <FormItem
-        label="角色"
-        name="role"
-        :rules="[{ required: true, message: '请输入角色!' }]"
-      >
-        <Select
-          v-model:value="editRow.role"
-          placeholder="请选择角色"
-          :options="roleOptions"
-        />
-      </FormItem>
-      <FormItem
-        label="所属部门"
-        name="dept"
-      >
-        <Select
-          v-model:value="editRow.dept"
-          placeholder="请选择所属部门"
-          :options="deptOptions"
-        />
-      </FormItem>
-      <FormItem
-        label="昵称"
-        name="nickname"
-        :rules="[{ required: true, message: '请输入昵称!' }]"
-      >
-        <Input
-          v-model:value="editRow.nickname"
-          placeholder="请输入用户昵称"
-        />
-      </FormItem>
-      <FormItem
-        label="邮箱"
-        name="email"
-        :rules="[{ required: true, message: '请输入邮箱!' }]"
-      >
-        <Input
-          v-model:value="editRow.email"
-          placeholder="请输入邮箱"
-        />
-      </FormItem>
-      <FormItem
-        label="备注"
-        name="remark"
-      >
-        <Input.TextArea
-          v-model:value="editRow.remark"
-          placeholder="请输入备注"
-        />
-      </FormItem>
-    </Form>
+    <UseForm
+      :edit-row="editRow"
+      :form-options="formOptions"
+      :register="register"
+    />
   </Modal>
 </template>
