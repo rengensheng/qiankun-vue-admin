@@ -33,13 +33,15 @@ async function getMenuListFlatten(): Promise<Route[]> {
 onMounted(async () => {
   const menuList = await getMenuListFlatten()
   console.log('route', route)
+  document
   menuList.forEach((menu) => {
     if (menu.path === route.fullPath) {
+      const container = document.createElement('div')
       microApp.value = loadMicroApp(
         {
           name: (route.params.appName as string) || route.fullPath.split('/')[2],
           entry: menu.url || menu.component,
-          container: '#sub-app-container',
+          container,
           props: {
             menu: menu
           }
@@ -52,10 +54,12 @@ onMounted(async () => {
           }
         }
       )
+      document.getElementById('sub-app-container')?.appendChild(container)
     }
   })
 })
-onUnmounted(() => {
+onUnmounted(async () => {
+  console.log(microApp.value)
   microApp.value?.unmount()
 })
 </script>
