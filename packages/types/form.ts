@@ -1,4 +1,3 @@
-import { Ref } from 'vue'
 import { DictOption } from './dict'
 
 export type FormOption = {

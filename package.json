@@ -22,7 +22,10 @@
     "vue": "^3.5.12"
   },
   "devDependencies": {
+    "@iconify-json/tabler": "^1.2.7",
     "@types/node": "^22.8.2",
+    "@unocss/preset-icons": "^0.63.6",
+    "@unocss/preset-uno": "^0.63.6",
     "@vitejs/plugin-vue": "^5.1.4",
     "eslint": "^9.13.0",
     "eslint-config-prettier": "^9.1.0",

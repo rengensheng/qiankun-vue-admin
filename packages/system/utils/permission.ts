@@ -6,15 +6,17 @@ export function registerMenuRouter(
   componentList: Record<string, () => Promise<any>>
 ) {
   const routes = menuList
-    .filter((item) => !item.component.startsWith('http'))
+    .filter((item) => typeof item.component === 'string' && !item.component.startsWith('http'))
     .map((menu) => {
       if (menu.children) {
         menu.children = menu.children
-          .filter((item) => !item.component.startsWith('http'))
+          .filter(
+            (item) => typeof item.component === 'string' && !item.component.startsWith('http')
+          )
           .map((child) => {
             return {
               ...child,
-              component: componentList[`./views/${child.component}`]
+              component: componentList[`../views/${child.component}`]
             }
           }) as any
       }
@@ -22,13 +24,13 @@ export function registerMenuRouter(
         if (menu.component === 'LAYOUT') {
           return {
             ...menu,
-            component: componentList[`./views/layouts/index.vue`],
+            component: componentList[`../views/layouts/index.vue`],
             children: menu.children
           }
         } else {
           return {
             ...menu,
-            component: componentList[`./views/${menu.component}`],
+            component: componentList[`../views/${menu.component}`],
             children: menu.children
           }
         }

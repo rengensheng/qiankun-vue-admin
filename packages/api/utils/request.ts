@@ -18,6 +18,10 @@ export async function postAction<T>(
   if (data.code === 0) {
     return data
   }
+  if (data.code === 401) {
+    localStorage.removeItem('token')
+    window.location.href = '/login'
+  }
   throw new Error(data.message)
 }
 
@@ -38,6 +42,10 @@ export async function getAction<T>(
   }).then((res) => res.json())
   if (data.code === 0) {
     return data
+  }
+  if (data.code === 401) {
+    localStorage.removeItem('token')
+    window.location.href = '/login'
   }
   throw new Error(data.message)
 }
