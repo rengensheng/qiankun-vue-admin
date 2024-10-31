@@ -7,7 +7,9 @@ export async function useDict(
   value: string,
   treeLabel?: string
 ): Promise<DictOption[]> {
-  const dictResp = await postAction<ApiListType<Record<string, string>>>(apiUrl)
+  const dictResp = await postAction<ApiListType<Record<string, string>>>(apiUrl, {
+    pageSize: 1000
+  })
   if (dictResp.result && dictResp.result.items) {
     const dictList = dictResp.result.items.map((item) => {
       const dictItem: DictOption = {

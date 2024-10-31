@@ -9,16 +9,30 @@ export function registerMenuRouter(
     .filter((item) => typeof item.component === 'string' && !item.component.startsWith('http'))
     .map((menu) => {
       if (menu.children) {
-        menu.children = menu.children
-          .filter(
-            (item) => typeof item.component === 'string' && !item.component.startsWith('http')
-          )
-          .map((child) => {
-            return {
-              ...child,
-              component: componentList[`../views/${child.component}`]
-            }
-          }) as any
+        menu.children = (
+          menu.children
+            .filter(
+              (item) => typeof item.component === 'string' && !item.component.startsWith('http')
+            )
+            .map((child) => {
+              return {
+                ...child,
+                component: componentList[`../views/${child.component}`]
+              }
+            }) as any
+        ).concat(
+          menu.children
+            .filter(
+              (item) => typeof item.component === 'string' && item.component.startsWith('http')
+            )
+            .map((child) => {
+              return {
+                ...child,
+                url: child.component,
+                component: () => import(`../views/micro/index.vue`)
+              }
+            })
+        )
       }
       if (menu.component) {
         if (menu.component === 'LAYOUT') {

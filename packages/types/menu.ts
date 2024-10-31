@@ -10,6 +10,7 @@ export type Route = {
   name: string
   icon: string
   component: string
+  url: string
   id: string
   meta: Meta
   orderNo: number

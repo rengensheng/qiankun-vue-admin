@@ -16,7 +16,8 @@ const formOptions: FormOption[] = [
     field: 'parentMenu',
     name: '上级菜单',
     type: 'treeSelect',
-    options: menuTreeOptions
+    options: menuTreeOptions,
+    clearable: true
   },
   {
     field: 'routePath',
@@ -34,7 +35,7 @@ const formOptions: FormOption[] = [
     field: 'permission',
     name: '权限标识',
     type: 'input',
-    required: true
+    required: false
   },
   {
     field: 'status',

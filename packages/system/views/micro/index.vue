@@ -35,11 +35,10 @@ onMounted(async () => {
   console.log('route', route)
   menuList.forEach((menu) => {
     if (menu.path === route.fullPath) {
-      console.log('menu', menu)
       microApp.value = loadMicroApp(
         {
-          name: route.params.appName as string,
-          entry: menu.component,
+          name: (route.params.appName as string) || route.fullPath.split('/')[2],
+          entry: menu.url || menu.component,
           container: '#sub-app-container',
           props: {
             menu: menu
@@ -48,6 +47,7 @@ onMounted(async () => {
         {
           // sandbox: { strictStyleIsolation: true },
           getPublicPath(entry: any) {
+            console.log('entry', entry)
             return entry.substring(0, entry.lastIndexOf('/') + 1).replace('micro/', '')
           }
         }
