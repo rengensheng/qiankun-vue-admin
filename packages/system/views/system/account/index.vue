@@ -80,6 +80,7 @@ const { register, getFormValues } = useForm<AccountType>()
 
 const {
   loading,
+  scroll,
   dataSource,
   pagination,
   openModal,
@@ -113,6 +114,7 @@ loadDict()
       :columns="columns"
       :dataSource="dataSource"
       :pagination="false"
+      :scroll="scroll"
     >
       <template #bodyCell="{ column, text, record }">
         <template v-if="column.dataIndex === 'action'">

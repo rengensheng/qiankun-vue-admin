@@ -86,6 +86,7 @@ const formOptions: FormOption[] = [
 const { register, getFormValues } = useForm<MenuType>()
 const {
   loading,
+  scroll,
   dataSource,
   openModal,
   editRow,
@@ -163,6 +164,7 @@ loadDict()
       :dataSource="dataSource"
       :pagination="false"
       :loading="loading"
+      :scroll="scroll"
     >
       <template #bodyCell="{ column, text, record }">
         <template v-if="column.dataIndex === 'action'">

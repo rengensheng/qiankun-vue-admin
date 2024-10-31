@@ -1,4 +1,4 @@
-import { ref, watchEffect } from 'vue'
+import { onMounted, ref, watchEffect } from 'vue'
 import { postAction } from '@packages/api/utils/request'
 import { ApiBase, ApiListType } from '@packages/types'
 import { message } from '@packages/components'
@@ -9,6 +9,8 @@ export type TableOptionType = {
   api: string
   pageNo?: number
   pageSize?: number
+  outHeight?: number
+  outWidth?: number
   createCheck?: (record: Partial<ApiBase>) => boolean
   updateCheck?: (record: Partial<ApiBase>) => boolean
   getValues?: () => Promise<Partial<ApiBase>>
@@ -20,6 +22,7 @@ export type TableOptionType = {
 export function useTable<T extends ApiBase>(option: TableOptionType) {
   const openModal = ref(false)
   const editRow = ref<T>({} as any)
+  const scroll = ref({ x: 0, y: 0 })
   const loading = ref<boolean>(false)
   const pagination = ref<PaginationProps>({
     current: option.pageNo || 1,
@@ -145,12 +148,22 @@ export function useTable<T extends ApiBase>(option: TableOptionType) {
     openModal.value = false
   }
 
+  function calcTableSize() {
+    scroll.value.y = window.innerHeight - (option.outHeight || 350)
+    scroll.value.x = window.innerWidth - 350
+  }
+
+  onMounted(() => {
+    calcTableSize()
+  })
+
   watchEffect(() => {
     handleGetList()
   })
 
   return {
     loading,
+    scroll,
     dataSource,
     pagination,
     openModal,

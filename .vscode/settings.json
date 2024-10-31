@@ -19,5 +19,6 @@
   "editor.suggest.snippetsPreventQuickSuggestions": false,
   "aiXcoder.showTrayIcon": true,
   "git-merge-to-test.mregeToBranch": "test",
-  "nuxt.isNuxtApp": false
+  "nuxt.isNuxtApp": false,
+  "oxc.enable": true
 }

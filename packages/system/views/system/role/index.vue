@@ -18,6 +18,7 @@ import { saveRoleMenu } from '@packages/api/role'
 const { register, getFormValues } = useForm<RoleType>()
 const {
   loading,
+  scroll,
   dataSource,
   pagination,
   openModal,
@@ -141,6 +142,9 @@ parseMenuList()
           :loading="loading"
           rowKey="id"
           :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
+          :scroll="{
+            y: scroll.y
+          }"
         >
           <template #bodyCell="{ column, text, record }">
             <template v-if="column.dataIndex === 'action'">
