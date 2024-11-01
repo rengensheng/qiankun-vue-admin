@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { getMenuList } from '@packages/api/menu'
-import { UserLoginRes, Route } from '@packages/types'
+import { UserLoginRes, Route, ApiResponse } from '@packages/types'
 type UserStoreState = {
   user: UserLoginRes | null
   menuList: Route[]
@@ -12,7 +12,7 @@ type UserStoreAction = {
   loadMenuList(): Promise<Route[]>
 }
 
-let menuLoadPromise: Promise<any> | null = null
+let menuLoadPromise: Promise<ApiResponse<Route[]>> | null = null
 
 export const useUserStore = defineStore<string, UserStoreState, {}, UserStoreAction>('userStore', {
   state: () => ({
@@ -39,6 +39,16 @@ export const useUserStore = defineStore<string, UserStoreState, {}, UserStoreAct
       }
       try {
         const menuListResp = await menuLoadPromise
+        if (menuListResp.result) {
+          menuListResp.result.forEach((item) => {
+            item.fullPath = item.path
+            if (item.children) {
+              item.children.forEach((child) => {
+                child.fullPath = item.path + '/' + child.path
+              })
+            }
+          })
+        }
         this.menuList = menuListResp.result || []
         return this.menuList
       } catch (e) {

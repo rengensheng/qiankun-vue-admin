@@ -81,6 +81,7 @@ async function addTab(key: string) {
   openPanes.value.push(menuInfo)
 }
 function deleteTab(key: any) {
+  if (openPanes.value.length === 1) return
   const index = openPanes.value.findIndex((pane) => pane.key === key)
   openPanes.value.splice(index, 1)
   if (activePaneKey.value === key) {

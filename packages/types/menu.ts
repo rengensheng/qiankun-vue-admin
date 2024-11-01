@@ -15,6 +15,7 @@ export type Route = {
   meta: Meta
   orderNo: number
   parentPath: string
+  fullPath: string
   children?: Route[]
 }
 

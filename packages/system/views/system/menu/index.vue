@@ -32,6 +32,12 @@ const formOptions: FormOption[] = [
     required: true
   },
   {
+    field: 'icon',
+    name: '图标',
+    type: 'input',
+    required: false
+  },
+  {
     field: 'permission',
     name: '权限标识',
     type: 'input',

@@ -41,6 +41,12 @@ export function registerMenuRouter(
             component: componentList[`../views/layouts/index.vue`],
             children: menu.children
           }
+        } else if (menu.component === 'DEFINE') {
+          return {
+            ...menu,
+            component: componentList[`../views/layouts/define.vue`],
+            children: menu.children
+          }
         } else {
           return {
             ...menu,
