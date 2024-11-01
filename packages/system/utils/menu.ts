@@ -13,4 +13,8 @@ export async function loadMenu(router: Router) {
   routes.forEach((item) => {
     router.addRoute(item)
   })
+  router.addRoute({
+    path: '/:pathMatch(.*)*',
+    redirect: '/404'
+  })
 }

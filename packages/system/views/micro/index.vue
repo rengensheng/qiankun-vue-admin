@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useUserStore } from '@packages/store'
 import { Route } from '@packages/types'
 import { onMounted, onUnmounted, ref } from 'vue'
 import { loadMicroApp } from 'qiankun'
 
 const route = useRoute()
+const router = useRouter()
 const store = useUserStore()
 const microApp = ref<any>(null)
 
@@ -32,8 +33,6 @@ async function getMenuListFlatten(): Promise<Route[]> {
 
 onMounted(async () => {
   const menuList = await getMenuListFlatten()
-  console.log('route', route)
-  document
   menuList.forEach((menu) => {
     if (menu.path === route.fullPath) {
       const container = document.createElement('div')
@@ -57,6 +56,12 @@ onMounted(async () => {
       document.getElementById('sub-app-container')?.appendChild(container)
     }
   })
+  try {
+    await microApp.value.loadPromise
+  } catch (e) {
+    console.log('加载失败')
+    router.replace('/404')
+  }
 })
 onUnmounted(async () => {
   console.log(microApp.value)

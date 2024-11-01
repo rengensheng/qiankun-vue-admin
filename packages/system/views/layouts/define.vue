@@ -13,7 +13,7 @@ const openPanes = ref<any[]>([])
 const activePaneKey = ref<string>('')
 const isCollapsed = ref(false)
 
-watchEffect(() => {
+watchEffect(async () => {
   if (userStore.menuList.length > 0) {
     if (!currentSelectedMenuKeys.value) {
       handleSelectMenu({ key: route.fullPath })
@@ -111,6 +111,7 @@ function changeCollapsed() {
       </div>
       <div>
         <UseMenu
+          v-if="userStore.menuList.length > 0"
           :collapsed="isCollapsed"
           :menu="userStore.menuList"
           :default-active-key="currentSelectedMenuKeys"

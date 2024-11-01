@@ -16,6 +16,15 @@ const routes: RouteRecordRaw[] = [
         path: '/micro/:appName/:name',
         name: 'MicroChild',
         component: () => import('../views/micro/index.vue')
+      },
+      {
+        path: '/404',
+        name: 'NotFound',
+        meta: {
+          title: 'Page not found',
+          isLogin: false
+        },
+        component: () => import('../views/common/notFound.vue')
       }
     ]
   }

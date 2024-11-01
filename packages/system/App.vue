@@ -8,9 +8,8 @@ const router = useRouter()
 const route = useRoute()
 
 async function loadData() {
-  console.log('route', route.fullPath)
+  await router.isReady()
   if (route.fullPath === '/login') {
-    console.log('login')
     return
   }
   if (!localStorage.getItem('token')) {
@@ -18,10 +17,6 @@ async function loadData() {
     return
   }
   await loadMenu(router)
-  if (route.fullPath === '/') {
-    return
-  }
-  console.log('这里了', route.fullPath)
   router.replace(route.fullPath)
 }
 loadData()
