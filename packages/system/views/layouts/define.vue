@@ -153,7 +153,12 @@ function changeCollapsed() {
           >
           </TabPane>
         </Tabs>
-        <router-view :key="activePaneKey" />
+        <div
+          class="overflow-y-auto w-full"
+          style="height: calc(100vh - 120px)"
+        >
+          <router-view :key="activePaneKey" />
+        </div>
       </section>
     </div>
   </div>
