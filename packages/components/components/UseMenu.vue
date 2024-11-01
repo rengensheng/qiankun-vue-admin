@@ -78,14 +78,16 @@ handleOpenParent()
       </SubMenuItem>
     </template>
     <template v-else>
-      <UseMenuItem
-        v-if="!menuItem.meta || !menuItem.meta.hideMenu"
-        :active-key="activeKey"
-        :menu="menuItem"
-        :collapsed="collapsed"
-        :path="menuItem.fullPath"
-        @change="handleSelectMenu"
-      />
+      <div class="px-3">
+        <UseMenuItem
+          v-if="!menuItem.meta || !menuItem.meta.hideMenu"
+          :active-key="activeKey"
+          :menu="menuItem"
+          :collapsed="collapsed"
+          :path="menuItem.fullPath"
+          @change="handleSelectMenu"
+        />
+      </div>
     </template>
   </template>
 </template>
