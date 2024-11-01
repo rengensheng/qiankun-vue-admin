@@ -109,6 +109,10 @@ function onSelectChange(rowKeys: any[], selectRows: any[]) {
   })
 }
 async function handleSaveMenu() {
+  if (checkMenuKeys.value.checked.length === 0) {
+    message.error('请勾选菜单后保存')
+    return
+  }
   try {
     loading.value = true
     await saveRoleMenu({
