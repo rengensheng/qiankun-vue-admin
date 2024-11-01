@@ -26,7 +26,15 @@ async function handleLogin() {
       if (userStore.menuList.length === 0) {
         await loadMenu(router)
       }
-      router.replace('/dashboard/analysis')
+      if (userStore.menuList.length > 0) {
+        if (userStore.menuList[0].children?.length) {
+          router.replace(userStore.menuList[0].children![0].fullPath)
+        } else {
+          router.replace(userStore.menuList[0].fullPath)
+        }
+      } else {
+        router.replace('/dashboard/analysis')
+      }
     } else {
       message.error(userResp.message)
     }
@@ -52,7 +60,7 @@ async function handleLogin() {
           用户登录
         </div>
         <div class="text-center text-sm mb-5 text-gray-500">请输入账号密码进行登录</div>
-        <div>
+        <div class="w-full">
           <Input
             v-model:value="username"
             type="text"
