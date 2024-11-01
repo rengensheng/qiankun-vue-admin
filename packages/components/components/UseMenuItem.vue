@@ -16,6 +16,10 @@ const props = defineProps({
   path: {
     type: String,
     required: true
+  },
+  collapsed: {
+    type: Boolean,
+    default: false
   }
 })
 const emits = defineEmits(['change'])
@@ -37,9 +41,9 @@ function handleChangeMenu() {
       <Icons
         v-if="menu.icon"
         :name="menu.icon"
-        size="w-4 h-4 mr-2"
+        :size="collapsed ? 'w-6 h-6' : 'w-4 h-4 mr-2'"
       />
-      {{ menu.name }}
+      <span v-if="!collapsed">{{ menu.name }}</span>
     </div>
   </GsButton>
 </template>

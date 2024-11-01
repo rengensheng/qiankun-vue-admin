@@ -16,6 +16,10 @@ const props = defineProps({
   defaultActiveKey: {
     type: String,
     default: ''
+  },
+  collapsed: {
+    type: Boolean,
+    default: false
   }
 })
 const emits = defineEmits(['select'])
@@ -56,6 +60,7 @@ handleOpenParent()
         v-if="!menuItem.meta || !menuItem.meta.hideMenu"
         :open-keys="openKeys"
         @change="handleChangeSubMenu"
+        :collapsed="collapsed"
       >
         <template
           v-for="menuChild in menuItem.children"
@@ -65,6 +70,7 @@ handleOpenParent()
             v-if="!menuChild.meta || !menuChild.meta.hideMenu"
             :active-key="activeKey"
             :menu="menuChild"
+            :collapsed="collapsed"
             :path="menuChild.fullPath"
             @change="handleSelectMenu"
           />
@@ -76,6 +82,7 @@ handleOpenParent()
         v-if="!menuItem.meta || !menuItem.meta.hideMenu"
         :active-key="activeKey"
         :menu="menuItem"
+        :collapsed="collapsed"
         :path="menuItem.fullPath"
         @change="handleSelectMenu"
       />

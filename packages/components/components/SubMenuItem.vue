@@ -10,6 +10,10 @@ defineProps({
   openKeys: {
     type: Array as PropType<string[]>,
     required: true
+  },
+  collapsed: {
+    type: Boolean,
+    default: false
   }
 })
 const emits = defineEmits(['change'])
@@ -21,6 +25,7 @@ function handleChange(activeKey: string) {
 <template>
   <div class="px-3">
     <div
+      v-if="!collapsed"
       class="flex text-gray-400 hover:text-gray-700 cursor-pointer hover:font-bold py-2 px-1 text-sm group"
       @click="handleChange(menu.id)"
     >

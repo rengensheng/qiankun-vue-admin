@@ -11,6 +11,7 @@ const currentSelectedMenuKeys = ref<string>('')
 const openKeys = ref<string[]>([])
 const openPanes = ref<any[]>([])
 const activePaneKey = ref<string>('')
+const isCollapsed = ref(false)
 
 watchEffect(() => {
   if (userStore.menuList.length > 0) {
@@ -87,11 +88,17 @@ function handleChangeTab(key: any) {
   activePaneKey.value = key
   router.push(key)
 }
+function changeCollapsed() {
+  isCollapsed.value = !isCollapsed.value
+}
 </script>
 
 <template>
   <div class="w-screen h-screen flex w-full text-gray-500 p-0 m-0 overflow-hidden">
-    <div class="w-50 max-w-50 min-w-50 border-r-gray-100 border-solid border-t-none border-r-1">
+    <div
+      class="border-r-gray-100 border-solid border-t-none border-r-1"
+      :class="isCollapsed ? 'w-20 max-w-20 min-w-20' : 'w-50 max-w-50 min-w-50'"
+    >
       <div class="px-2 py-3">
         <div class="flex items-center text-xl font-bold justify-center">
           <img
@@ -99,11 +106,12 @@ function handleChangeTab(key: any) {
             alt="Vue logo"
             class="w-8 mr-2"
           />
-          Micro UI
+          <template v-if="!isCollapsed">Micro UI</template>
         </div>
       </div>
       <div>
         <UseMenu
+          :collapsed="isCollapsed"
           :menu="userStore.menuList"
           :default-active-key="currentSelectedMenuKeys"
           :default-open-keys="openKeys"
@@ -111,9 +119,25 @@ function handleChangeTab(key: any) {
         />
       </div>
     </div>
-    <div class="px-2 w-full flex-grow py-2">
-      <header></header>
-      <section>
+    <div class="w-full flex-grow">
+      <div class="py-1 items-center border-b-1 border-b-solid border-gray-100 flex h-12 bg-gray-50">
+        <div class="w-1/2 flex">
+          <div
+            v-if="!isCollapsed"
+            class="i-tabler:layout-sidebar-left-collapse-filled w-6 h-6 text-gray-400 ml-5 cursor-pointer"
+            @click="changeCollapsed"
+          ></div>
+          <div
+            v-else
+            class="i-tabler:layout-sidebar-right-collapse-filled w-6 h-6 text-gray-400 ml-5 cursor-pointer"
+            @click="changeCollapsed"
+          ></div>
+        </div>
+        <div class="w-1/2 flex justify-end px-2">
+          <div class="i-tabler:bell-ringing w-6 h-6 text-gray-400 mr-5"></div>
+        </div>
+      </div>
+      <section class="px-2 py-3">
         <Tabs
           v-model:activeKey="activePaneKey"
           hide-add
