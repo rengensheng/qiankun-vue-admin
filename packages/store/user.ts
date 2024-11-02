@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { getMenuList } from '@packages/api/menu'
+import { getUserInfo } from '@packages/api/user/login'
 import { UserLoginRes, Route, ApiResponse } from '@packages/types'
 type UserStoreState = {
   user: UserLoginRes | null
@@ -9,6 +10,7 @@ type UserStoreState = {
 type UserStoreAction = {
   login(userInfo: UserLoginRes): void
   getUserInfo(): void
+  updateUserInfo(): void
   loadMenuList(): Promise<Route[]>
 }
 
@@ -26,10 +28,18 @@ export const useUserStore = defineStore<string, UserStoreState, {}, UserStoreAct
       localStorage.setItem('token', userInfo.token)
       this.loadMenuList()
     },
-    async getUserInfo() {
-      const userInfo = localStorage.getItem('user')
+    async updateUserInfo() {
+      const userResp = await getUserInfo()
+      const userInfo = userResp.result
       if (userInfo) {
-        this.user = JSON.parse(userInfo)
+        this.user = userInfo
+      }
+    },
+    async getUserInfo() {
+      const userResp = await getUserInfo()
+      const userInfo = userResp.result
+      if (userInfo) {
+        this.user = userInfo
         this.loadMenuList()
       }
     },

@@ -25,6 +25,15 @@ const routes: RouteRecordRaw[] = [
           isLogin: false
         },
         component: () => import('../views/common/notFound.vue')
+      },
+      {
+        path: '/account/info',
+        name: 'userInfo',
+        meta: {
+          title: '用户资料设置',
+          isLogin: false
+        },
+        component: () => import('../views/system/account/info.vue')
       }
     ]
   }

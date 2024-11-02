@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useUserStore } from '@packages/store'
-import { Tabs, TabPane, UseMenu } from '@packages/components'
+import { Tabs, TabPane, UseMenu, Popover } from '@packages/components'
 import { ref, watchEffect } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 
@@ -91,6 +91,14 @@ function handleChangeTab(key: any) {
 function changeCollapsed() {
   isCollapsed.value = !isCollapsed.value
 }
+function handleSetting() {
+  console.log('handleSetting')
+  router.push('/account/info')
+}
+function handleExit() {
+  localStorage.removeItem('token')
+  router.replace('/login')
+}
 </script>
 
 <template>
@@ -121,7 +129,7 @@ function changeCollapsed() {
       </div>
     </div>
     <div class="w-full flex-grow">
-      <div class="py-1 items-center border-b-1 border-b-solid border-gray-100 flex h-12 bg-gray-50">
+      <div class="py-1 items-center border-b-1 border-b-solid border-gray-100 flex h-14 bg-gray-50">
         <div class="w-1/2 flex">
           <div
             v-if="!isCollapsed"
@@ -134,8 +142,69 @@ function changeCollapsed() {
             @click="changeCollapsed"
           ></div>
         </div>
-        <div class="w-1/2 flex justify-end px-2">
-          <div class="i-tabler:bell-ringing w-6 h-6 text-gray-400 mr-5"></div>
+        <div class="w-1/2 flex justify-end px-2 items-center">
+          <!-- <div class="i-tabler:bell-ringing w-6 h-6 text-gray-400 mr-5"></div> -->
+          <div>
+            <Popover
+              placement="bottomRight"
+              trigger="click"
+            >
+              <template #content>
+                <div class="w-64">
+                  <div
+                    class="px-2 py-3 flex items-center border-b-1 border-b-solid border-gray-100"
+                  >
+                    <div>
+                      <div class="w-15 h-15 mr-5 rounded-full overflow-hidden">
+                        <img
+                          v-if="!userStore.user?.avatar"
+                          src="/avatar.png"
+                          class="w-full h-full"
+                        />
+                        <img
+                          v-else
+                          :src="userStore.user?.avatar"
+                          class="w-full h-full"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <div class="text-lg font-bold">{{ userStore.user?.realName }}</div>
+                      <div class="text-sm">{{ userStore.user?.userId }}</div>
+                    </div>
+                  </div>
+                  <div>
+                    <div
+                      class="px-2 py-3 flex items-center border-b-1 border-b-solid border-gray-100 hover:bg-gray-50 cursor-pointer"
+                      @click="handleSetting"
+                    >
+                      <div class="i-tabler:settings w-6 h-6 text-gray-400 mr-5"></div>
+                      <div>用户设置</div>
+                    </div>
+                    <div
+                      class="px-2 py-3 flex items-center hover:bg-gray-50 cursor-pointer"
+                      @click="handleExit"
+                    >
+                      <div class="i-tabler:door-exit w-6 h-6 text-gray-400 mr-5"></div>
+                      <div>退出登录</div>
+                    </div>
+                  </div>
+                </div>
+              </template>
+              <div class="w-10 h-10 mr-5 rounded-full overflow-hidden">
+                <img
+                  v-if="!userStore.user?.avatar"
+                  src="/avatar.png"
+                  class="w-full h-full"
+                />
+                <img
+                  v-else
+                  :src="userStore.user?.avatar"
+                  class="w-full h-full"
+                />
+              </div>
+            </Popover>
+          </div>
         </div>
       </div>
       <section class="px-2 py-3">

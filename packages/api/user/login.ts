@@ -1,5 +1,5 @@
 import { UserLoginRes } from '@packages/types'
-import { postAction } from '../utils/request'
+import { postAction, uploadAction } from '../utils/request'
 
 export function userLogin(username: string, password: string) {
   return postAction<UserLoginRes>('/api/user/login ', {
@@ -17,4 +17,10 @@ export function changePassword(oldPassword: string, newPassword: string) {
     oldPassword,
     newPassword
   })
+}
+
+export function uploadAvatar(imageFile: File) {
+  const formData = new FormData()
+  formData.append('file', imageFile)
+  return uploadAction<UserLoginRes>('/api/user/avatar/upload', formData)
 }
