@@ -171,7 +171,7 @@ export function useTable<T extends ApiBase>(option: TableOptionType) {
   }
 
   function calcTableSize() {
-    scroll.value.y = window.innerHeight - (option.outHeight || 350)
+    scroll.value.y = window.innerHeight - (option.outHeight || 370)
     scroll.value.x = '100%'
   }
 

@@ -1,6 +1,6 @@
 import { DictOption } from './dict'
 
-export type FormOption = {
+export type SearchOption = {
   type:
     | 'input'
     | 'password'
@@ -23,16 +23,9 @@ export type FormOption = {
     | 'treeSelect'
   name: string
   field: string
+  search?: boolean
   options?: DictOption[] | any
   defaultValue?: string | number
-  required?: boolean
   placeholder?: string
   multiPlaceholder?: string[]
-  disabled?: boolean
-  readonly?: boolean
-  hidden?: boolean
-  search?: boolean
-  clearable?: boolean
-  multiple?: boolean
-  rules?: any[]
 }

@@ -8,7 +8,8 @@ import {
   Space,
   Tree,
   UseForm,
-  message
+  message,
+  SearchForm
 } from '@packages/components'
 import { FormOption, RoleType } from '@packages/types'
 import { useTable, useForm } from '@packages/hooks'
@@ -23,6 +24,7 @@ const {
   pagination,
   openModal,
   editRow,
+  handleSearch,
   handleGetList,
   handleDelete,
   handleOpenCreate,
@@ -56,12 +58,14 @@ const formOptions: FormOption[] = [
     field: 'roleName',
     name: '角色名',
     type: 'input',
+    search: true,
     required: true
   },
   {
     field: 'roleValue',
     name: '角色值',
     type: 'input',
+    search: true,
     required: true
   },
   {
@@ -135,6 +139,10 @@ parseMenuList()
   <div class="px-2">
     <div class="py-2 px-2">
       <h2 class="text-xl font-bold">角色管理</h2>
+      <SearchForm
+        :searchOptions="formOptions"
+        :handle-search="handleSearch"
+      />
     </div>
     <div class="py-2">
       <Button

@@ -7,7 +7,8 @@ import {
   Modal,
   Space,
   UseForm,
-  Tree
+  Tree,
+  SearchForm
 } from '@packages/components'
 import { useDict, useForm, useTable } from '@packages/hooks'
 import { ref } from 'vue'
@@ -50,6 +51,7 @@ const formOptions: FormOption[] = [
     field: 'account',
     name: '账户名',
     type: 'input',
+    search: true,
     required: true
   },
   {
@@ -69,6 +71,7 @@ const formOptions: FormOption[] = [
     field: 'nickname',
     name: '昵称',
     type: 'input',
+    search: true,
     required: true
   },
   {
@@ -120,6 +123,10 @@ function handleCheckTree() {
   <div class="px-2">
     <div class="py-2 px-2">
       <h2 class="text-xl font-bold">账号管理</h2>
+      <SearchForm
+        :searchOptions="formOptions"
+        :handle-search="handleSearch"
+      />
     </div>
     <div class="py-2">
       <Button

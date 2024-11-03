@@ -44,6 +44,7 @@ export {
 export { default as UseForm } from './components/UseForm.vue'
 export { default as UseMenu } from './components/UseMenu.vue'
 export { default as AvatarUpload } from './components/AvatarUpload.vue'
+export { default as SearchForm } from './components/SearchForm.vue'
 
 export type { PaginationProps } from 'ant-design-vue'
 

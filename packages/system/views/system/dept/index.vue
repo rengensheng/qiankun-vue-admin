@@ -7,7 +7,8 @@ import {
   Modal,
   Space,
   UseForm,
-  Tag
+  Tag,
+  SearchForm
 } from '@packages/components'
 import type { DeptType, DictOption, FormOption } from '@packages/types'
 import { useForm, useTable } from '@packages/hooks'
@@ -19,6 +20,7 @@ const formOptions: FormOption[] = [
     field: 'deptName',
     name: '部门名',
     type: 'input',
+    search: true,
     required: true
   },
   {
@@ -32,6 +34,7 @@ const formOptions: FormOption[] = [
     name: '是否启用',
     type: 'radioButton',
     defaultValue: '0',
+    search: true,
     options: [
       { label: '是', value: '0' },
       { label: '否', value: '1' }
@@ -58,6 +61,7 @@ const {
   pagination,
   openModal,
   editRow,
+  handleSearch,
   handleDelete,
   handleOpenCreate,
   handleOpenEdit,
@@ -102,7 +106,11 @@ function parseDeptList(dataList: DeptType[]) {
       delete dept.children
     }
   })
-  return dataList.filter((item) => !item.parentDept)
+  let list = dataList.filter((item) => !item.parentDept)
+  if (list.length === 0 && dataList.length > 0) {
+    list = dataList
+  }
+  return list
 }
 async function loadDict() {
   deptTreeOptions.value = await useDict('/api/dept/list', 'deptName', 'id', 'parentDept')
@@ -114,6 +122,10 @@ loadDict()
   <div class="px-2">
     <div class="py-2 px-2">
       <h2 class="text-xl font-bold">部门管理</h2>
+      <SearchForm
+        :searchOptions="formOptions"
+        :handle-search="handleSearch"
+      />
     </div>
     <div class="py-2">
       <Button

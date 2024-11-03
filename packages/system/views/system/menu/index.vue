@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Table, Popconfirm, Button, Modal, Space, Tag } from '@packages/components'
+import { Table, Popconfirm, Button, Modal, Space, Tag, SearchForm } from '@packages/components'
 import { useDict, useForm, useTable } from '@packages/hooks'
 import { ref } from 'vue'
 import { DictOption, FormOption, MenuType } from '@packages/types'
@@ -10,6 +10,7 @@ const formOptions: FormOption[] = [
     field: 'menuName',
     name: '菜单名称',
     type: 'input',
+    search: true,
     required: true
   },
   {
@@ -29,6 +30,7 @@ const formOptions: FormOption[] = [
     field: 'component',
     name: '组件路径',
     type: 'input',
+    search: true,
     required: true
   },
   {
@@ -101,6 +103,7 @@ const {
   dataSource,
   openModal,
   editRow,
+  handleSearch,
   handleDelete,
   handleOpenCreate,
   handleOpenEdit,
@@ -153,7 +156,11 @@ function parseMenuList(dataList: MenuType[]) {
       delete menu.children
     }
   })
-  return dataList.filter((item) => !item.parentMenu)
+  let list = dataList.filter((item) => !item.parentMenu)
+  if (list.length === 0 && dataList.length > 0) {
+    list = dataList
+  }
+  return list
 }
 async function loadDict() {
   menuTreeOptions.value = await useDict('/api/menu/list', 'menuName', 'id', 'parentMenu')
@@ -165,6 +172,10 @@ loadDict()
   <div class="px-2">
     <div class="py-2 px-2">
       <h2 class="text-xl font-bold">菜单管理</h2>
+      <SearchForm
+        :searchOptions="formOptions"
+        :handle-search="handleSearch"
+      />
     </div>
     <div class="py-2">
       <Button
