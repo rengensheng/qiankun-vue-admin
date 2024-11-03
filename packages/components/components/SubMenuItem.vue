@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Route } from '@packages/types'
-import { PropType, ref } from 'vue'
+import { PropType } from 'vue'
 
 defineProps({
   menu: {
