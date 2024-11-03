@@ -42,7 +42,8 @@ onMounted(async () => {
           entry: menu.url || menu.component,
           container,
           props: {
-            menu: menu
+            menu: menu,
+            user: store.user
           }
         },
         {
@@ -59,7 +60,7 @@ onMounted(async () => {
   try {
     await microApp.value.loadPromise
   } catch (e) {
-    console.log('加载失败')
+    console.log('加载失败', e)
     router.replace('/404')
   }
 })

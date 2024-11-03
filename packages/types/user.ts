@@ -10,6 +10,8 @@ export type UserLoginRes = {
   userId: string
   username: string
   avatar: string
+  email: string
+  phone: string
   roles: SimpleRole[]
 }
 

@@ -24,3 +24,11 @@ export function uploadAvatar(imageFile: File) {
   formData.append('file', imageFile)
   return uploadAction<UserLoginRes>('/api/user/avatar/upload', formData)
 }
+
+export function changeUserInfo(nickName: string, email: string, phone?: string) {
+  return postAction<UserLoginRes>('/api/user/change', {
+    nickname: nickName,
+    email,
+    phone
+  })
+}
