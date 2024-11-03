@@ -25,7 +25,10 @@ export type TableOptionType = {
 export function useTable<T extends ApiBase>(option: TableOptionType) {
   const openModal = ref(false)
   const editRow = ref<T>({} as any)
-  const scroll = ref({ x: 0, y: 0 })
+  const scroll = ref<{
+    x: string | number
+    y: string | number
+  }>({ x: 0, y: 0 })
   const loading = ref<boolean>(false)
   const pagination = ref<PaginationProps>({
     current: option.pageNo || 1,
@@ -122,6 +125,7 @@ export function useTable<T extends ApiBase>(option: TableOptionType) {
 
   async function handleSearch(params: Record<string, any>) {
     searchParams.value = params
+    pagination.value.current = 1
   }
 
   async function handleOpenCreate() {
@@ -168,7 +172,7 @@ export function useTable<T extends ApiBase>(option: TableOptionType) {
 
   function calcTableSize() {
     scroll.value.y = window.innerHeight - (option.outHeight || 350)
-    scroll.value.x = window.innerWidth - 350
+    scroll.value.x = '100%'
   }
 
   onMounted(() => {

@@ -66,6 +66,10 @@ const {
   name: '部门',
   api: 'dept',
   formOptions,
+  pageSize: 10000,
+  sortItem: 'orderNo',
+  sortType: 'asc',
+  parseList: parseDeptList,
   getValues: getFormValues
 })
 const columns = [
@@ -90,6 +94,16 @@ const columns = [
     dataIndex: 'action'
   }
 ]
+function parseDeptList(dataList: DeptType[]) {
+  dataList.forEach((dept) => {
+    dept.key = dept.id
+    dept.children = dataList.filter((item) => item.parentDept === dept.id)
+    if (!dept.children.length) {
+      delete dept.children
+    }
+  })
+  return dataList.filter((item) => !item.parentDept)
+}
 async function loadDict() {
   deptTreeOptions.value = await useDict('/api/dept/list', 'deptName', 'id', 'parentDept')
 }

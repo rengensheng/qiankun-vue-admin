@@ -1,10 +1,20 @@
 <script setup lang="ts">
-import { Table, Popconfirm, Pagination, Button, Modal, Space, UseForm } from '@packages/components'
+import {
+  Table,
+  Popconfirm,
+  Pagination,
+  Button,
+  Modal,
+  Space,
+  UseForm,
+  Tree
+} from '@packages/components'
 import { useDict, useForm, useTable } from '@packages/hooks'
 import { ref } from 'vue'
 import { AccountType, DictOption, FormOption } from '@packages/types'
 const roleOptions = ref<DictOption[]>([])
 const deptOptions = ref<DictOption[]>([])
+const checkMenuKeys = ref<string[]>([])
 const columns = [
   {
     title: '用户名',
@@ -31,12 +41,10 @@ const columns = [
     dataIndex: 'action'
   }
 ]
-
 async function loadDict() {
   roleOptions.value = await useDict('/api/role/list', 'roleName', 'roleValue')
-  deptOptions.value = await useDict('/api/dept/list', 'deptName', 'id')
+  deptOptions.value = await useDict('/api/dept/list', 'deptName', 'id', 'parentDept')
 }
-
 const formOptions: FormOption[] = [
   {
     field: 'account',
@@ -55,7 +63,7 @@ const formOptions: FormOption[] = [
     field: 'dept',
     name: '所属部门',
     options: deptOptions,
-    type: 'select'
+    type: 'treeSelect'
   },
   {
     field: 'nickname',
@@ -85,6 +93,7 @@ const {
   pagination,
   openModal,
   editRow,
+  handleSearch,
   handleDelete,
   handleOpenCreate,
   handleOpenEdit,
@@ -95,6 +104,16 @@ const {
   getValues: getFormValues
 })
 loadDict()
+function handleCheckTree() {
+  console.log('checkMenuKeys', checkMenuKeys.value)
+  if (checkMenuKeys.value.length > 0) {
+    handleSearch({
+      dept: checkMenuKeys.value.join(',')
+    })
+  } else {
+    handleSearch({})
+  }
+}
 </script>
 
 <template>
@@ -109,42 +128,65 @@ loadDict()
         >新建用户</Button
       >
     </div>
-    <Table
-      :loading="loading"
-      :columns="columns"
-      :dataSource="dataSource"
-      :pagination="false"
-      :scroll="scroll"
-    >
-      <template #bodyCell="{ column, text, record }">
-        <template v-if="column.dataIndex === 'action'">
-          <Space>
-            <a @click="handleOpenEdit(record as AccountType)">编辑</a>
-            <Popconfirm
-              v-if="dataSource.length"
-              title="确认删除吗?"
-              @confirm="handleDelete(record.id)"
-            >
-              <a>删除</a>
-            </Popconfirm>
-          </Space>
-        </template>
-        <template v-else>
-          {{ text }}
-        </template>
-      </template>
-    </Table>
-    <div class="flex mt-4 justify-end">
-      <Pagination
-        class="py-2 px-2"
-        v-model:current="pagination.current"
-        v-model:pageSize="pagination.pageSize"
-        show-quick-jumper
-        :show-total="(total) => `共 ${total} 条`"
-        show-size-changer
-        :total="pagination.total"
-        @change="pagination.onChange"
-      />
+    <div class="flex">
+      <div class="w-64">
+        <Tree
+          @check="handleCheckTree"
+          v-if="deptOptions.length"
+          :tree-data="deptOptions as any"
+          :auto-expand-parent="true"
+          :default-expand-all="true"
+          :field-names="{
+            title: 'label',
+            key: 'value',
+            children: 'children'
+          }"
+          checkable
+          v-model:checkedKeys="checkMenuKeys as any"
+        />
+      </div>
+      <div class="w-3/5 flex-1">
+        <Table
+          :loading="loading"
+          :columns="columns"
+          :dataSource="dataSource"
+          :pagination="false"
+          :scroll="{
+            x: '100%',
+            y: scroll.y
+          }"
+        >
+          <template #bodyCell="{ column, text, record }">
+            <template v-if="column.dataIndex === 'action'">
+              <Space>
+                <a @click="handleOpenEdit(record as AccountType)">编辑</a>
+                <Popconfirm
+                  v-if="dataSource.length"
+                  title="确认删除吗?"
+                  @confirm="handleDelete(record.id)"
+                >
+                  <a>删除</a>
+                </Popconfirm>
+              </Space>
+            </template>
+            <template v-else>
+              {{ text }}
+            </template>
+          </template>
+        </Table>
+        <div class="flex mt-4 justify-end">
+          <Pagination
+            class="py-2 px-2"
+            v-model:current="pagination.current"
+            v-model:pageSize="pagination.pageSize"
+            show-quick-jumper
+            :show-total="(total) => `共 ${total} 条`"
+            show-size-changer
+            :total="pagination.total"
+            @change="pagination.onChange"
+          />
+        </div>
+      </div>
     </div>
   </div>
   <Modal

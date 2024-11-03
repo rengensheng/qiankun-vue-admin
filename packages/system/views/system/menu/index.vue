@@ -109,7 +109,7 @@ const {
   name: '菜单',
   api: 'menu',
   pageSize: 10000,
-  sortItem: 'order_no',
+  sortItem: 'orderNo',
   sortType: 'asc',
   formOptions,
   parseList: parseMenuList,
