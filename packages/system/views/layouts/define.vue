@@ -104,7 +104,7 @@ function handleExit() {
 <template>
   <div class="w-screen h-screen flex w-full text-gray-500 p-0 m-0 overflow-hidden">
     <div
-      class="border-r-gray-100 border-r-solid border-t-none border-r-1"
+      class="border-r-gray-100 border-r-solid border-t-none border-r-1 transition-property-bg transition-duration-500 transition-ease"
       :class="isCollapsed ? 'w-20 max-w-20 min-w-20' : 'w-50 max-w-50 min-w-50'"
     >
       <div class="px-2 py-3">
@@ -233,3 +233,9 @@ function handleExit() {
     </div>
   </div>
 </template>
+
+<!-- <style>
+.aaa:hover {
+  background-color: black;
+}
+</style> -->
