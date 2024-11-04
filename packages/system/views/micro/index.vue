@@ -31,6 +31,13 @@ async function getMenuListFlatten(): Promise<Route[]> {
   return menuList
 }
 
+function getMicroAppPath(url: string) {
+  if (process.env.NODE_ENV === 'development') {
+    return url
+  }
+  return window.origin + url.replace(/http:\/\/.*?:\d*?\//, '/')
+}
+
 onMounted(async () => {
   const menuList = await getMenuListFlatten()
   menuList.forEach((menu) => {
@@ -39,7 +46,7 @@ onMounted(async () => {
       microApp.value = loadMicroApp(
         {
           name: (route.params.appName as string) || route.fullPath.split('/')[2],
-          entry: menu.url || menu.component,
+          entry: getMicroAppPath(menu.url || menu.component),
           container,
           props: {
             menu: menu,
