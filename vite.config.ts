@@ -2,9 +2,11 @@ import { defineConfig, loadEnv } from 'vite'
 import UnoCSS from 'unocss/vite'
 import { visualizer } from 'rollup-plugin-visualizer'
 import vue from '@vitejs/plugin-vue'
+import { loadingIcon } from './scripts/icon'
 
-export default defineConfig(({ mode }) => {
+export default defineConfig(async ({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
+  await loadingIcon(env.VITE_PROXY_URL)
   return {
     plugins: [
       vue(),

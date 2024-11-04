@@ -3,6 +3,7 @@ import './style.css'
 import '@unocss/reset/normalize.css'
 import 'virtual:uno.css'
 import App from './App.vue'
+import './components/icon.ts'
 import { registerRouter } from '@packages/system/index.ts'
 import { registerStore } from '@packages/store/index.ts'
 

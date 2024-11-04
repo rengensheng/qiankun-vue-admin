@@ -1,0 +1,2 @@
+// @unocss-include
+export const icons = ["i-tabler:activity","i-tabler:brand-airtable","i-tabler:brand-google-big-query","i-tabler:brand-databricks","","ant-design:setting-outlined","i-tabler:user-filled","i-tabler:users-group","i-tabler:lock-password","ant-design:appstore-outlined","i-tabler:device-desktop-analytics","i-tabler:menu-2","i-tabler:user-cog","ant-design:dashboard-outlined"]
