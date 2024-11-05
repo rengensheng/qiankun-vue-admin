@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Input, Button, message } from '@packages/components'
+import background from './background.vue'
 import { useUserStore } from '@packages/store'
 import { userLogin } from '@packages/api/user/login'
 import { useRouter } from 'vue-router'
@@ -48,10 +49,8 @@ async function handleLogin() {
 
 <template>
   <div class="w-screen h-screen bg-gray-50 flex">
-    <div
-      class="w-2/3 text-6xl flex items-center justify-center bg-clip-text text-transparent website-logo"
-    >
-      QianKun Admin
+    <div class="w-2/3 text-6xl flex items-center justify-center text-transparent position-relative">
+      <background> QianKun Admin </background>
     </div>
     <div class="flex w-1/3 justify-center items-center h-full bg-white">
       <div class="w-96 flex flex-col items-start justify-center">
@@ -87,34 +86,4 @@ async function handleLogin() {
   </div>
 </template>
 
-<style scoped>
-.website-logo {
-  transition: all 0.2s linear;
-  animation: color-change 5s linear infinite;
-  background-image: linear-gradient(
-    to right,
-    #ff8177 0%,
-    #ff867a 10%,
-    #8ec5fc 20%,
-    #ff8c7f 40%,
-    #f99185 30%,
-    #ffa6b7 40%,
-    #e0c3fc 50%,
-    #ff8177 70%,
-    #8ec5fc 90%,
-    #e77aa2 100%
-  );
-  background-size: 200% 200%;
-}
-@keyframes color-change {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-</style>
+<style scoped></style>
