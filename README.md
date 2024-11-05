@@ -20,19 +20,26 @@ Qiankun Vue Admin 是一个基于 Vue 和 Qiankun 微前端框架的管理系统
 
 ### 安装依赖
 
-````bash
-# 使用 npm
+```bash
+# 使用 pnpm
 pnpm install
+
+# 或者
+pnpm bootstrap
+```
 
 ### 启动项目
 
 ```bash
 # 启动主应用框架爱
-npm run dev
+pnpm run dev
 
-# 启动子应用
-npm run start:sp
-````
+# 启动子所有子应用
+pnpm run start:all
+
+# 启动单个子应用
+pnpm run start:sp
+```
 
 ### 构建项目
 
