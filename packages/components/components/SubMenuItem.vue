@@ -39,7 +39,7 @@ function handleChange(activeKey: string) {
           class="i-tabler:chevron-right w-4 h-4"
         ></div>
       </div>
-      <div class="select-none">
+      <div class="select-none whitespace-nowrap">
         {{ menu.name }}
       </div>
     </div>

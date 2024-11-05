@@ -43,7 +43,11 @@ function handleChangeMenu() {
         :name="menu.icon"
         :size="collapsed ? 'w-6 h-6' : 'w-4 h-4 mr-2'"
       />
-      <span v-if="!collapsed">{{ menu.name }}</span>
+      <span
+        v-if="!collapsed"
+        class="block whitespace-nowrap"
+        >{{ menu.name }}</span
+      >
     </div>
   </GsButton>
 </template>

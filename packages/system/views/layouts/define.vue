@@ -124,7 +124,9 @@ onMounted(() => {
             alt="Vue logo"
             class="w-8 mr-2"
           />
-          <template v-if="!isCollapsed">Micro UI</template>
+          <template v-if="!isCollapsed">
+            <span class="whitespace-nowrap">Micro UI</span>
+          </template>
         </div>
       </div>
       <div>
