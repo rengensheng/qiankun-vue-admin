@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useUserStore } from '@packages/store'
 import { Tabs, TabPane, UseMenu, Popover } from '@packages/components'
-import { ref, watchEffect } from 'vue'
+import { onMounted, ref, watchEffect } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 
 const userStore = useUserStore()
@@ -12,6 +12,7 @@ const openKeys = ref<string[]>([])
 const openPanes = ref<any[]>([])
 const activePaneKey = ref<string>('')
 const isCollapsed = ref(false)
+const loadingView = ref(false)
 
 watchEffect(async () => {
   if (userStore.menuList.length > 0) {
@@ -99,6 +100,15 @@ function handleExit() {
   localStorage.removeItem('token')
   router.replace('/login')
 }
+onMounted(() => {
+  router.beforeEach((_to, _from, next) => {
+    loadingView.value = true
+    next()
+  })
+  router.afterEach(() => {
+    loadingView.value = false
+  })
+})
 </script>
 
 <template>
@@ -224,18 +234,33 @@ function handleExit() {
           </TabPane>
         </Tabs>
         <div
-          class="overflow-y-auto w-full"
+          class="overflow-y-auto w-full relative"
           style="height: calc(100vh - 120px)"
         >
           <router-view :key="activePaneKey" />
+          <div
+            v-if="loadingView"
+            class="absolute left-0 right-0 top-0 bottom-0 bg-white flex flex-col justify-center items-center bg-op-70"
+          >
+            <div class="i-tabler:loader w-10 h-10 text-blue-500 loading-icon -mt-50"></div>
+            <div class="text-base text-gray-400 mt-5">正在加载中</div>
+          </div>
         </div>
       </section>
     </div>
   </div>
 </template>
 
-<!-- <style>
-.aaa:hover {
-  background-color: black;
+<style>
+@keyframes icon-rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
-</style> -->
+.loading-icon {
+  animation: icon-rotate 2s linear infinite;
+}
+</style>

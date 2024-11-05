@@ -8,6 +8,7 @@ import { loadMicroApp } from 'qiankun'
 const route = useRoute()
 const router = useRouter()
 const store = useUserStore()
+const loadingView = ref(false)
 const microApp = ref<any>(null)
 
 async function getMenuListFlatten(): Promise<Route[]> {
@@ -64,11 +65,14 @@ onMounted(async () => {
       document.getElementById('sub-app-container')?.appendChild(container)
     }
   })
+  loadingView.value = true
   try {
-    await microApp.value.loadPromise
+    await microApp.value.mountPromise
   } catch (e) {
     console.log('加载失败', e)
     router.replace('/404')
+  } finally {
+    loadingView.value = false
   }
 })
 onUnmounted(async () => {
@@ -79,4 +83,25 @@ onUnmounted(async () => {
 
 <template>
   <div id="sub-app-container"></div>
+  <div
+    v-if="loadingView"
+    class="absolute left-0 right-0 top-0 bottom-0 bg-white flex flex-col justify-center items-center bg-op-70"
+  >
+    <div class="i-tabler:loader w-10 h-10 text-blue-500 loading-icon -mt-50"></div>
+    <div class="text-base text-gray-400 mt-5">正在加载中</div>
+  </div>
 </template>
+
+<style>
+@keyframes icon-rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.loading-icon {
+  animation: icon-rotate 2s linear infinite;
+}
+</style>
