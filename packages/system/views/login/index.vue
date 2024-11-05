@@ -12,7 +12,7 @@ const router = useRouter()
 const username = ref<string>('')
 const password = ref<string>('')
 const loading = ref<boolean>(false)
-
+const systemName = (import.meta as any).env.VITE_APP_NAME || 'Micro UI'
 async function handleLogin() {
   if (!username.value || !password.value) {
     message.error('用户名和密码不能为空')
@@ -50,7 +50,7 @@ async function handleLogin() {
 <template>
   <div class="w-screen h-screen bg-gray-50 flex">
     <div class="w-2/3 text-6xl flex items-center justify-center text-transparent position-relative">
-      <background> QianKun Admin </background>
+      <background> {{ systemName + '登录' }} </background>
     </div>
     <div class="flex w-1/3 justify-center items-center h-full bg-white">
       <div class="w-96 flex flex-col items-start justify-center">
