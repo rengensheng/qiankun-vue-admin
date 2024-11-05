@@ -6,7 +6,7 @@
     >
       <div
         class="star"
-        v-for="(item, index) in starsCount"
+        v-for="index in starsCount"
         :key="index"
       ></div>
     </div>
