@@ -34,7 +34,7 @@ pnpm bootstrap
 # 启动主应用框架爱
 pnpm run dev
 
-# 启动子所有子应用
+# 启动所有子应用
 pnpm run start:all
 
 # 启动单个子应用
