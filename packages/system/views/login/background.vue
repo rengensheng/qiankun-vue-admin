@@ -48,13 +48,12 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(200% 100% at bottom center, #f7f7b6, #db6f8e, #1b2947);
   background: radial-gradient(
     200% 105% at top center,
-    #1b2947 10%,
-    #75517d 40%,
-    #e96f92 65%,
-    #f7f7b6
+    #1c81e6cc 10%,
+    #266a9ecc 40%,
+    #2d4e94cc 65%,
+    #594e7acc
   );
   background-attachment: fixed;
   overflow: hidden;
@@ -88,22 +87,12 @@ onMounted(() => {
 }
 
 .website-logo {
-  transition: all 0.2s linear;
-  animation: color-change 5s linear infinite;
-  background-image: linear-gradient(
-    to right,
-    #ff8177 0%,
-    #ff867a 10%,
-    #8ec5fc 20%,
-    #ff8c7f 40%,
-    #f99185 30%,
-    #ffa6b7 40%,
-    #e0c3fc 50%,
-    #ff8177 70%,
-    #8ec5fc 90%,
-    #e77aa2 100%
-  );
-  background-size: 200% 200%;
+  text-shadow:
+    1px 1px 0 #726d77,
+    2px 2px 0 #7e7877,
+    3px 3px 0 #9e9a9a,
+    4px 4px 0 #928f8f;
+  color: #f7f7f5;
 }
 @keyframes color-change {
   0% {
