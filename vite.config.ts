@@ -1,7 +1,7 @@
 import { defineConfig, loadEnv } from 'vite'
 import UnoCSS from 'unocss/vite'
-import { visualizer } from 'rollup-plugin-visualizer'
 import vue from '@vitejs/plugin-vue'
+import { visualizer } from 'rollup-plugin-visualizer'
 import { loadingIcon } from './scripts/icon'
 
 export default defineConfig(async ({ mode }) => {
