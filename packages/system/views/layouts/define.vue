@@ -13,6 +13,7 @@ const openPanes = ref<any[]>([])
 const activePaneKey = ref<string>('')
 const isCollapsed = ref(false)
 const loadingView = ref(false)
+const webSiteName = (import.meta as any).env.VITE_APP_NAME || 'Micro UI'
 
 watchEffect(async () => {
   if (userStore.menuList.length > 0) {
@@ -120,13 +121,13 @@ onMounted(() => {
       <div class="px-2 py-3">
         <div class="flex items-center text-xl font-bold justify-center">
           <img
-            src="https://vuejs.org/images/logo.png"
+            src="/vite.svg"
             alt="Vue logo"
             class="w-8 mr-2"
           />
           <Transition name="logo">
             <template v-if="!isCollapsed">
-              <span class="whitespace-nowrap">Micro UI</span>
+              <span class="whitespace-nowrap">{{ webSiteName }}</span>
             </template>
           </Transition>
         </div>
