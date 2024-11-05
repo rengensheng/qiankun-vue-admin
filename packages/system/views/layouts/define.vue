@@ -124,9 +124,11 @@ onMounted(() => {
             alt="Vue logo"
             class="w-8 mr-2"
           />
-          <template v-if="!isCollapsed">
-            <span class="whitespace-nowrap">Micro UI</span>
-          </template>
+          <Transition name="logo">
+            <template v-if="!isCollapsed">
+              <span class="whitespace-nowrap">Micro UI</span>
+            </template>
+          </Transition>
         </div>
       </div>
       <div>
@@ -264,5 +266,19 @@ onMounted(() => {
 }
 .loading-icon {
   animation: icon-rotate 2s linear infinite;
+}
+.logo-leave-active,
+.logo-enter-active {
+  opacity: 1;
+  width: fit-content;
+  transition: all 0.5s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.logo-enter-from,
+.logo-leave-to {
+  width: 0;
+  opacity: 0;
+  font-size: 12px;
+  z-index: -1;
 }
 </style>

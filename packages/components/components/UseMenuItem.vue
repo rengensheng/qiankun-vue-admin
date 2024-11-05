@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Route } from '@packages/types'
-import { PropType } from 'vue'
+import { computed, PropType } from 'vue'
 import Icons from './Icons.vue'
 import GsButton from './GsButton.vue'
 
@@ -23,6 +23,12 @@ const props = defineProps({
   }
 })
 const emits = defineEmits(['change'])
+
+const iconSize = computed(() => {
+  const baseCss = 'transition-property-all transition-duration-500 transition-ease'
+  const iconCss = props.collapsed ? `w-6 h-6` : 'w-4 h-4 mr-2'
+  return `${iconCss} ${baseCss}`
+})
 function handleChangeMenu() {
   emits('change', props.path)
 }
@@ -41,13 +47,30 @@ function handleChangeMenu() {
       <Icons
         v-if="menu.icon"
         :name="menu.icon"
-        :size="collapsed ? 'w-6 h-6' : 'w-4 h-4 mr-2'"
+        :size="iconSize"
       />
-      <span
-        v-if="!collapsed"
-        class="block whitespace-nowrap"
-        >{{ menu.name }}</span
-      >
+      <Transition name="slide-fade">
+        <span
+          v-if="!collapsed"
+          class="block whitespace-nowrap"
+          >{{ menu.name }}</span
+        >
+      </Transition>
     </div>
   </GsButton>
 </template>
+
+<style>
+.slide-fade-leave-active,
+.slide-fade-enter-active {
+  width: fit-content;
+  opacity: 1;
+  transition: all 0.5s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  width: fit-content;
+  opacity: 0;
+}
+</style>
