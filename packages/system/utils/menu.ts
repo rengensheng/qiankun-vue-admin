@@ -17,4 +17,10 @@ export async function loadMenu(router: Router) {
     path: '/:pathMatch(.*)*',
     redirect: '/404'
   })
+  router.afterEach((to) => {
+    const title =
+      (to.meta && to.meta.title && to.meta.title + '-' + (import.meta as any).env.VITE_APP_NAME) ||
+      (import.meta as any).env.VITE_APP_NAME
+    document.title = title
+  })
 }
