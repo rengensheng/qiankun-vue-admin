@@ -18,7 +18,7 @@ const blockSize = ref<{
 })
 const startMoveFlag = ref(false)
 
-function hanldeUploadAvatar() {
+function handleUploadAvatar() {
   document.getElementById('uploadImage')?.click()
 }
 function handleImageChange(event: Event) {
@@ -39,11 +39,11 @@ function loadDefaultImage(imageUrl: string) {
   const img = new Image()
   img.src = imageUrl
   img.onload = function () {
-    const imageWidthScalc = 300 / img.width
-    const imageHeightScalc = 300 / img.height
-    const scalc = Math.min(imageWidthScalc, imageHeightScalc)
-    const imageWidth = img.width * scalc
-    const imageHeight = img.height * scalc
+    const imageWidthScale = 300 / img.width
+    const imageHeightScale = 300 / img.height
+    const scale = Math.min(imageWidthScale, imageHeightScale)
+    const imageWidth = img.width * scale
+    const imageHeight = img.height * scale
     ctx?.drawImage(img, (300 - imageWidth) / 2, (300 - imageHeight) / 2, imageWidth, imageHeight)
     handleGetPreview()
   }
@@ -148,7 +148,7 @@ onMounted(() => {
         <div class="flex py-3 flex justify-around">
           <Button
             type="primary"
-            @click="hanldeUploadAvatar"
+            @click="handleUploadAvatar"
             >上传头像</Button
           >
           <Button
