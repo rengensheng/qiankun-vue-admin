@@ -8,6 +8,14 @@ export function userLogin(username: string, password: string) {
   })
 }
 
+export function userRegister(username: string, password: string, nickname: string) {
+  return postAction<UserLoginRes>('/api/user/register', {
+    username,
+    password,
+    nickname
+  })
+}
+
 export function getUserInfo() {
   return postAction<UserLoginRes>('/api/user/getUserInfo', {})
 }

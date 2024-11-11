@@ -37,8 +37,10 @@ export {
   TimePicker,
   Tree,
   Tag,
+  Badge,
   Popover,
-  Upload
+  Upload,
+  notification
 } from 'ant-design-vue'
 
 export { default as UseForm } from './components/UseForm.vue'

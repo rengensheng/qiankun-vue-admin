@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useUserStore } from '@packages/store'
 import { Tabs, TabPane, UseMenu, Popover } from '@packages/components'
+import SystemNotification from '../../components/SystemNotification.vue'
 import { onMounted, ref, watchEffect } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 
@@ -158,7 +159,7 @@ onMounted(() => {
           ></div>
         </div>
         <div class="w-1/2 flex justify-end px-2 items-center">
-          <!-- <div class="i-tabler:bell-ringing w-6 h-6 text-gray-400 mr-5"></div> -->
+          <SystemNotification />
           <div>
             <Popover
               placement="bottomRight"
