@@ -19,11 +19,13 @@ const checkMenuKeys = ref<string[]>([])
 const columns = [
   {
     title: '用户名',
-    dataIndex: 'account'
+    dataIndex: 'account',
+    sorter: true
   },
   {
     title: '昵称',
-    dataIndex: 'nickname'
+    dataIndex: 'nickname',
+    sorter: true
   },
   {
     title: '邮箱',
@@ -35,7 +37,8 @@ const columns = [
   },
   {
     title: '创建时间',
-    dataIndex: 'createdTime'
+    dataIndex: 'createdTime',
+    sorter: true
   },
   {
     title: '操作',
@@ -100,7 +103,8 @@ const {
   handleDelete,
   handleOpenCreate,
   handleOpenEdit,
-  handleSave
+  handleSave,
+  handleTableChange
 } = useTable<AccountType>({
   name: '用户',
   api: 'user',
@@ -157,6 +161,7 @@ function handleCheckTree() {
           :loading="loading"
           :columns="columns"
           :dataSource="dataSource"
+          @change="handleTableChange"
           :pagination="false"
           :scroll="{
             x: '100%',

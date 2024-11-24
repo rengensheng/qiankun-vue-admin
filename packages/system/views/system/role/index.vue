@@ -29,7 +29,8 @@ const {
   handleDelete,
   handleOpenCreate,
   handleOpenEdit,
-  handleSave
+  handleSave,
+  handleTableChange
 } = useTable<RoleType>({
   name: '角色',
   api: 'role',
@@ -38,15 +39,18 @@ const {
 const columns = [
   {
     title: '角色名',
-    dataIndex: 'roleName'
+    dataIndex: 'roleName',
+    sorter: true
   },
   {
     title: '角色值',
-    dataIndex: 'roleValue'
+    dataIndex: 'roleValue',
+    sorter: true
   },
   {
     title: '创建时间',
-    dataIndex: 'createdTime'
+    dataIndex: 'createdTime',
+    sorter: true
   },
   {
     title: '操作',
@@ -163,6 +167,7 @@ parseMenuList()
           :scroll="{
             y: scroll.y
           }"
+          @change="handleTableChange"
         >
           <template #bodyCell="{ column, text, record }">
             <template v-if="column.dataIndex === 'action'">

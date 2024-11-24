@@ -40,6 +40,8 @@ export function useTable<T extends ApiBase>(option: TableOptionType) {
     }
   })
   const searchParams = ref<Record<string, any>>({})
+  const tableSortParams = ref<Record<string, any>>({})
+  const tableFilterParams = ref<Record<string, any>>({})
   const dataSource = ref<T[]>([])
 
   async function handleGetList() {
@@ -55,8 +57,9 @@ export function useTable<T extends ApiBase>(option: TableOptionType) {
       const listResp = await postAction<ApiListType<T>>(`/api/${option.api}/list`, {
         pageNo: pagination.value.current,
         pageSize: pagination.value.pageSize,
-        query: searchParams.value,
-        ...sortParams
+        query: { ...searchParams.value, ...tableFilterParams.value },
+        ...sortParams,
+        ...tableSortParams.value
       })
       if (listResp.result) {
         if (option.parseList && listResp.result.items) {
@@ -175,6 +178,26 @@ export function useTable<T extends ApiBase>(option: TableOptionType) {
     scroll.value.x = '100%'
   }
 
+  function handleTableChange(_: any, filters: Record<string, any>, sorter: any) {
+    const sorted = sorter as {
+      order: 'ascend' | 'descend' | null
+      field: string
+    }
+    if (sorted.order) {
+      tableSortParams.value['sortItem'] = sorted.field
+      tableSortParams.value['sortType'] = sorted.order === 'ascend' ? 'asc' : 'desc'
+    } else {
+      delete tableSortParams.value['sortItem']
+      delete tableSortParams.value['sortType']
+    }
+    tableFilterParams.value = {}
+    for (const key in filters) {
+      if (filters[key]) {
+        tableFilterParams.value[key] = filters[key].join(',')
+      }
+    }
+  }
+
   onMounted(() => {
     calcTableSize()
   })
@@ -197,6 +220,7 @@ export function useTable<T extends ApiBase>(option: TableOptionType) {
     handleDelete,
     handleOpenCreate,
     handleOpenEdit,
-    handleSave
+    handleSave,
+    handleTableChange
   }
 }

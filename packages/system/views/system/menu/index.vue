@@ -107,7 +107,8 @@ const {
   handleDelete,
   handleOpenCreate,
   handleOpenEdit,
-  handleSave
+  handleSave,
+  handleTableChange
 } = useTable<MenuType>({
   name: '菜单',
   api: 'menu',
@@ -121,7 +122,8 @@ const {
 const columns = [
   {
     title: '菜单名',
-    dataIndex: 'menuName'
+    dataIndex: 'menuName',
+    sorter: true
   },
   {
     title: '权限标识',
@@ -133,15 +135,21 @@ const columns = [
   },
   {
     title: '排序',
-    dataIndex: 'orderNo'
+    dataIndex: 'orderNo',
+    sorter: true
   },
   {
     title: '状态',
-    dataIndex: 'status'
+    dataIndex: 'status',
+    filters: [
+      { text: '是', value: '0' },
+      { text: '否', value: '1' }
+    ]
   },
   {
     title: '创建时间',
-    dataIndex: 'createdTime'
+    dataIndex: 'createdTime',
+    sorter: true
   },
   {
     title: '操作',
@@ -190,6 +198,7 @@ loadDict()
       :pagination="false"
       :loading="loading"
       :scroll="scroll"
+      @change="handleTableChange"
     >
       <template #bodyCell="{ column, text, record }">
         <template v-if="column.dataIndex === 'status'">

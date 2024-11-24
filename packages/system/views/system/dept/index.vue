@@ -65,7 +65,8 @@ const {
   handleDelete,
   handleOpenCreate,
   handleOpenEdit,
-  handleSave
+  handleSave,
+  handleTableChange
 } = useTable<DeptType>({
   name: '部门',
   api: 'dept',
@@ -79,19 +80,27 @@ const {
 const columns = [
   {
     title: '部门名称',
-    dataIndex: 'deptName'
+    dataIndex: 'deptName',
+    sorter: true
   },
   {
     title: '排序',
-    dataIndex: 'orderNo'
+    dataIndex: 'orderNo',
+    sorter: true
   },
   {
     title: '是否启用',
-    dataIndex: 'status'
+    dataIndex: 'status',
+    sorter: true,
+    filters: [
+      { text: '是', value: '0' },
+      { text: '否', value: '1' }
+    ]
   },
   {
     title: '创建时间',
-    dataIndex: 'createdTime'
+    dataIndex: 'createdTime',
+    sorter: true
   },
   {
     title: '操作',
@@ -140,6 +149,7 @@ loadDict()
       :pagination="false"
       :loading="loading"
       :scroll="scroll"
+      @change="handleTableChange"
     >
       <template #bodyCell="{ column, text, record }">
         <template v-if="column.dataIndex === 'status'">
