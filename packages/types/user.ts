@@ -4,11 +4,10 @@ export type SimpleRole = {
 }
 
 export type UserLoginRes = {
+  account: string
   desc: string
   realName: string
   token: string
-  userId: string
-  username: string
   avatar: string
   email: string
   phone: string
@@ -18,15 +17,15 @@ export type UserLoginRes = {
 export type AccountType = {
   account: string
   createdBy: string
-  createdTime: string // 可以考虑使用 Date 类型，如果你在处理日期时需要
+  createdTime: string
   dept: string
   email: string
   id: string
   nickname: string
-  pwd: string // 注意：在生产环境中，不建议明文存储密码
-  remark?: string // 可选属性
+  pwd: string
+  remark?: string
   revision: number
   role: string
   updatedBy: string
-  updatedTime: string // 同样可以考虑使用 Date 类型
+  updatedTime: string
 }

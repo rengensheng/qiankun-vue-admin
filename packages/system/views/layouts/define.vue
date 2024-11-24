@@ -186,7 +186,7 @@ onMounted(() => {
                     </div>
                     <div>
                       <div class="text-lg font-bold">{{ userStore.user?.realName }}</div>
-                      <div class="text-sm">{{ userStore.user?.userId }}</div>
+                      <div class="text-sm">{{ userStore.user?.account }}</div>
                     </div>
                   </div>
                   <div>
