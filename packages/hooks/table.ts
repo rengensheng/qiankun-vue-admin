@@ -147,19 +147,36 @@ export function useTable<T extends ApiBase>(option: TableOptionType) {
   }
 
   async function handleOpenEdit(record: T) {
-    delete record.createdTime
-    delete record.updatedTime
-    if (option.setValues) {
-      await option.setValues(record)
+    const recordCopy = { ...record }
+    delete recordCopy.createdTime
+    delete recordCopy.updatedTime
+    if (option.formOptions) {
+      for (const key in recordCopy) {
+        const item = option.formOptions.find((item) => item.field === key)
+        if (item && item.multiple && typeof recordCopy[key] === 'string') {
+          recordCopy[key] = recordCopy[key].split(',') as any
+        }
+      }
     }
-    editRow.value = { ...record }
+    if (option.setValues) {
+      await option.setValues(recordCopy)
+    }
+    editRow.value = { ...recordCopy }
     openModal.value = true
   }
 
   async function handleSave() {
-    console.log(option.getValues)
     if (option.getValues) {
-      const formValue = await option.getValues()
+      const formValue: any = await option.getValues()
+      if (option.formOptions) {
+        for (const key in formValue) {
+          const item = option.formOptions.find((item) => item.field === key)
+          console.log(key, item)
+          if (item && item.multiple && Array.isArray(formValue[key])) {
+            formValue[key] = formValue[key].join(',')
+          }
+        }
+      }
       editRow.value = { ...editRow.value, ...formValue }
     }
     if (editRow.value.id) {

@@ -88,6 +88,7 @@ watchEffect(() => {
             v-model:value="editRow[formItem.field]"
             :placeholder="formItem.placeholder || '请选择'"
             :options="formItem.options"
+            :mode="formItem.multiple ? 'multiple' : undefined"
           />
           <InputNumber
             v-show="!formItem.hidden"

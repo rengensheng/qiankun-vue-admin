@@ -200,8 +200,8 @@ parseMenuList()
           />
         </div>
       </div>
-      <div class="w-1/3">
-        <div class="flex items-start justify-between px-2">
+      <div class="w-1/3 px-4">
+        <div class="flex items-start justify-between">
           <h2 class="text-xl font-bold">菜单权限</h2>
           <Button
             type="primary"

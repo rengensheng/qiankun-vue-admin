@@ -36,6 +36,10 @@ const columns = [
     dataIndex: 'role'
   },
   {
+    title: '部门',
+    dataIndex: 'dept'
+  },
+  {
     title: '创建时间',
     dataIndex: 'createdTime',
     sorter: true
@@ -62,7 +66,8 @@ const formOptions: FormOption[] = [
     name: '角色',
     type: 'select',
     options: roleOptions,
-    required: true
+    required: true,
+    multiple: true
   },
   {
     field: 'dept',
@@ -108,6 +113,7 @@ const {
 } = useTable<AccountType>({
   name: '用户',
   api: 'user',
+  formOptions,
   getValues: getFormValues
 })
 loadDict()
@@ -120,6 +126,22 @@ function handleCheckTree() {
   } else {
     handleSearch({})
   }
+}
+function getRoleName(value: string) {
+  if (!value) return '-'
+  const roleValues = value.split(',')
+  return roleOptions.value
+    .filter((item) => roleValues.includes(item.value as string))
+    .map((item) => item.label)
+    .join(',')
+}
+function getDeptName(value: string) {
+  if (!value) return '-'
+  const deptValues = value.split(',')
+  return deptOptions.value
+    .filter((item) => deptValues.includes(item.value as string))
+    .map((item) => item.label)
+    .join(',')
 }
 </script>
 
@@ -140,7 +162,7 @@ function handleCheckTree() {
       >
     </div>
     <div class="flex">
-      <div class="w-64">
+      <div class="w-50">
         <Tree
           @check="handleCheckTree"
           v-if="deptOptions.length"
@@ -180,6 +202,12 @@ function handleCheckTree() {
                   <a>删除</a>
                 </Popconfirm>
               </Space>
+            </template>
+            <template v-else-if="column.dataIndex === 'role'">
+              {{ getRoleName(record.role) }}
+            </template>
+            <template v-else-if="column.dataIndex === 'dept'">
+              {{ getDeptName(record.dept) }}
             </template>
             <template v-else>
               {{ text }}
