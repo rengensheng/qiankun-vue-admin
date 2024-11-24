@@ -40,6 +40,7 @@ export {
   Badge,
   Popover,
   Upload,
+  Dropdown,
   notification
 } from 'ant-design-vue'
 

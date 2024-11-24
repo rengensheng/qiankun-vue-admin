@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useUserStore } from '@packages/store'
-import { Tabs, TabPane, UseMenu, Popover } from '@packages/components'
+import { Tabs, TabPane, UseMenu, Popover, Dropdown } from '@packages/components'
 import SystemNotification from '../../components/SystemNotification.vue'
-import { onMounted, ref, watchEffect } from 'vue'
+import { onMounted, ref, watchEffect, nextTick } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 
 const userStore = useUserStore()
@@ -14,6 +14,7 @@ const openPanes = ref<any[]>([])
 const activePaneKey = ref<string>('')
 const isCollapsed = ref(false)
 const loadingView = ref(false)
+const refresh = ref(false)
 const webSiteName = (import.meta as any).env.VITE_APP_NAME || 'Micro UI'
 
 watchEffect(async () => {
@@ -101,6 +102,19 @@ function handleSetting() {
 function handleExit() {
   localStorage.removeItem('token')
   router.replace('/login')
+}
+function handleRefresh() {
+  refresh.value = true
+  nextTick(() => {
+    refresh.value = false
+  })
+}
+function handleCloseCurrent(activeKey: string) {
+  deleteTab(activeKey)
+}
+function handleCloseOther(activeKey: string) {
+  openPanes.value = openPanes.value.filter((pane) => pane.key === activeKey)
+  handleChangeTab(activeKey)
 }
 onMounted(() => {
   router.beforeEach((_to, _from, next) => {
@@ -234,16 +248,50 @@ onMounted(() => {
           <TabPane
             v-for="pane in openPanes"
             :key="pane.key"
-            :tab="pane.title"
             :closable="true"
           >
+            <template #tab>
+              <Dropdown :trigger="['contextmenu']">
+                <template #overlay>
+                  <div
+                    class="bg-white shadow-lg border border-solid border-gray-200 rounded-md mt-3"
+                  >
+                    <div
+                      class="flex items-center px-3 py-2 hover:bg-gray-100 cursor-pointer"
+                      @click="handleRefresh"
+                    >
+                      <div class="i-tabler:refresh w-1em h-1em mr-2"></div>
+                      <div>刷新页面</div>
+                    </div>
+                    <div
+                      class="flex items-center px-3 py-2 hover:bg-gray-100 cursor-pointer"
+                      @click="handleCloseCurrent(pane.key)"
+                    >
+                      <div class="i-tabler:device-imac-off w-1em h-1em mr-2"></div>
+                      <div>关闭当前</div>
+                    </div>
+                    <div
+                      class="flex items-center px-3 py-2 hover:bg-gray-100 cursor-pointer"
+                      @click="handleCloseOther(pane.key)"
+                    >
+                      <div class="i-tabler:device-imac-x w-1em h-1em mr-2"></div>
+                      <div>关闭其他</div>
+                    </div>
+                  </div>
+                </template>
+                <span>{{ pane.title }}</span>
+              </Dropdown>
+            </template>
           </TabPane>
         </Tabs>
         <div
           class="overflow-y-auto w-full relative"
           style="height: calc(100vh - 120px)"
         >
-          <router-view :key="activePaneKey" />
+          <router-view
+            :key="activePaneKey"
+            v-if="!refresh"
+          />
           <div
             v-if="loadingView"
             class="absolute left-0 right-0 top-0 bottom-0 bg-white flex flex-col justify-center items-center bg-op-70"
