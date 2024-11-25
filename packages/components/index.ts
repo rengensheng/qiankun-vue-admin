@@ -41,6 +41,7 @@ export {
   Popover,
   Upload,
   Dropdown,
+  Divider,
   notification
 } from 'ant-design-vue'
 

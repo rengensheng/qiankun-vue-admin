@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Input, Button, message } from '@packages/components'
-import background from './background.vue'
 import { useUserStore } from '@packages/store'
 import { userRegister } from '@packages/api/user/login'
 import { useRouter } from 'vue-router'
@@ -55,54 +54,78 @@ async function handleRegister() {
 
 <template>
   <div class="w-screen h-screen bg-gray-50 flex">
-    <div class="w-2/3 text-6xl flex items-center justify-center text-transparent position-relative">
-      <background> {{ systemName + '注册账户' }} </background>
+    <div class="w-3/5 text-6xl flex items-center justify-center text-transparent position-relative">
+      <div>
+        <div class="w-full mx-auto">
+          <img
+            src="/bg.svg"
+            class="w-120"
+          />
+          <div class="text-gray-700 text-3xl text-center mt-10">{{ systemName + '注册' }}</div>
+        </div>
+      </div>
     </div>
-    <div class="flex w-1/3 justify-center items-center h-full bg-white">
+    <div class="flex flex-grow justify-center items-center h-full bg-white">
       <div class="w-96 flex flex-col items-start justify-center">
         <div class="text-center text-2xl font-bold mb-4 flex items-center text-gray-600">
-          <div class="i-tabler:user-screen w-8 h-8 mr-2"></div>
           用户注册
         </div>
-        <div class="text-center text-sm mb-5 text-gray-500">请输入账号密码进行注册</div>
+        <div class="text-center text-sm mb-7 text-gray-500">请输入账号密码进行注册</div>
         <div class="w-full">
           <Input
             v-model:value="username"
             type="text"
-            class="w-full border border-gray-300 rounded mb-2"
+            class="w-full border border-gray-300 rounded mb-5"
             placeholder="登录账户名"
-          />
+          >
+            <template #prefix>
+              <div class="i-tabler:user text-gray-400 w-1em h-1em"></div>
+            </template>
+          </Input>
           <Input
             v-model:value="nickname"
             type="text"
-            class="w-full border border-gray-300 rounded mb-2"
+            class="w-full border border-gray-300 rounded mb-5"
             placeholder="用户昵称"
-          />
+          >
+            <template #prefix>
+              <div class="i-tabler:user-edit text-gray-400 w-1em h-1em"></div>
+            </template>
+          </Input>
           <Input
             v-model:value="password"
             type="password"
-            class="w-full border border-gray-300 rounded mb-2"
+            class="w-full border border-gray-300 rounded mb-5"
             placeholder="密码"
-          />
+          >
+            <template #prefix>
+              <div class="i-tabler:lock-password text-gray-400 w-1em h-1em"></div>
+            </template>
+          </Input>
           <Input
             v-model:value="rePassword"
             type="password"
-            class="w-full border border-gray-300 rounded mb-2"
+            class="w-full border border-gray-300 rounded mb-5"
             placeholder="再次输入密码"
-          />
+          >
+            <template #prefix>
+              <div class="i-tabler:password-fingerprint text-gray-400 w-1em h-1em"></div>
+            </template>
+          </Input>
         </div>
         <Button
           type="primary"
-          class="w-full mt-4"
+          class="w-full mt-4 flex py-4 items-center !border-gray-600 justify-center bg-gray-600 hover:bg-gray-500 hover:outline-none hover:!text-white text-white font-bold"
           :loading="loading"
           @click="handleRegister"
         >
+          <div class="i-tabler:user-plus w-4 h-4 mr-2"></div>
           注册账号</Button
         >
         <div class="w-full py-3 text-right">
           <router-link
             to="/login"
-            class="text-blue-500"
+            class="text-gray-500"
             >登录系统</router-link
           >
         </div>
