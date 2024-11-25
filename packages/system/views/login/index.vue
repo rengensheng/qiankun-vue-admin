@@ -2,12 +2,13 @@
 import { Input, Button, Divider, message } from '@packages/components'
 import { useUserStore } from '@packages/store'
 import { userLogin } from '@packages/api/user/login'
-import { useRouter } from 'vue-router'
-import { ref } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import { onMounted, ref } from 'vue'
 import { loadMenu } from '../../utils/menu'
 
 const userStore = useUserStore()
 const router = useRouter()
+const route = useRoute()
 const username = ref<string>('')
 const password = ref<string>('')
 const loading = ref<boolean>(false)
@@ -45,11 +46,29 @@ async function handleLogin() {
   }
 }
 function handleGithubLogin() {
-  message.warning('暂未开放')
+  const clientId = (import.meta as any).env.VITE_GITHUB_CLIENT_ID
+  if (!clientId) {
+    message.error('请配置Github登录clientId')
+    return
+  }
+  window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${window.location.origin}/login?from=github`
 }
 function handleGoogleLogin() {
-  message.warning('暂未开放')
+  const clientId = (import.meta as any).env.VITE_GOOGLE_CLIENT_ID
+  if (!clientId) {
+    message.error('请配置Google登录clientId')
+    return
+  }
+  const stateCode = '3EAB37D9D5310BFE'
+  window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.email&state=${stateCode}&include_granted_scopes=true&response_type=code&client_id=${clientId}&redirect_uri=${window.location.origin}/login?from=google`
 }
+onMounted(() => {
+  if (route.query.from === 'github') {
+    message.success('github login')
+  } else if (route.query.from === 'google') {
+    message.success('google login')
+  }
+})
 </script>
 
 <template>
