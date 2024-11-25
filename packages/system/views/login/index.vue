@@ -80,7 +80,8 @@ function handleGithubLogin() {
     message.error('请配置Github登录clientId')
     return
   }
-  window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${window.location.origin}/login?from=github`
+  const backUrl = encodeURIComponent(`${window.location.origin}/login?from=github`)
+  window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${backUrl}`
 }
 function handleGoogleLogin() {
   const clientId = (import.meta as any).env.VITE_GOOGLE_CLIENT_ID
@@ -89,7 +90,8 @@ function handleGoogleLogin() {
     return
   }
   const stateCode = '3EAB37D9D5310BFE'
-  window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile&state=${stateCode}&include_granted_scopes=true&response_type=code&client_id=${clientId}&redirect_uri=${window.location.origin}/login?from=google`
+  const backUrl = encodeURIComponent(`${window.location.origin}/login?from=google`)
+  window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile&state=${stateCode}&include_granted_scopes=true&response_type=code&client_id=${clientId}&redirect_uri=${backUrl}`
 }
 onMounted(() => {
   if (route.query.from === 'github') {
