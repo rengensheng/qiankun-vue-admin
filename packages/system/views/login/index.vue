@@ -2,9 +2,11 @@
 import { Input, Button, Divider, message } from '@packages/components'
 import { useUserStore } from '@packages/store'
 import { userLogin } from '@packages/api/user/login'
+import { githubLogin, googleLogin } from '@packages/api/oauth/login'
 import { useRouter, useRoute } from 'vue-router'
 import { onMounted, ref } from 'vue'
 import { loadMenu } from '../../utils/menu'
+import { ApiResponse, UserLoginRes } from '@packages/types'
 
 const userStore = useUserStore()
 const router = useRouter()
@@ -21,30 +23,57 @@ async function handleLogin() {
   try {
     loading.value = true
     const userResp = await userLogin(username.value, password.value)
-    if (userResp.result) {
-      userStore.login(userResp.result)
-      message.success('登录成功')
-      if (userStore.menuList.length === 0) {
-        await loadMenu(router)
-      }
-      if (userStore.menuList.length > 0) {
-        if (userStore.menuList[0].children?.length) {
-          router.replace(userStore.menuList[0].children![0].fullPath)
-        } else {
-          router.replace(userStore.menuList[0].fullPath)
-        }
-      } else {
-        router.replace('/dashboard/analysis')
-      }
-    } else {
-      message.error(userResp.message)
-    }
+    loginSystem(userResp)
   } catch (error: any) {
     message.error(error.message)
   } finally {
     loading.value = false
   }
 }
+
+async function loginSystem(userResp: ApiResponse<UserLoginRes>) {
+  if (userResp.result) {
+    userStore.login(userResp.result)
+    message.success('登录成功')
+    if (userStore.menuList.length === 0) {
+      await loadMenu(router)
+    }
+    if (userStore.menuList.length > 0) {
+      if (userStore.menuList[0].children?.length) {
+        router.replace(userStore.menuList[0].children![0].fullPath)
+      } else {
+        router.replace(userStore.menuList[0].fullPath)
+      }
+    } else {
+      router.replace('/dashboard/analysis')
+    }
+  } else {
+    message.error(userResp.message)
+  }
+}
+
+function useGithubLogin(code: string) {
+  loading.value = true
+  githubLogin(code)
+    .then((resp) => {
+      loginSystem(resp)
+    })
+    .finally(() => {
+      loading.value = false
+    })
+}
+
+function useGoogleLogin(code: string) {
+  loading.value = true
+  googleLogin(code)
+    .then((resp) => {
+      loginSystem(resp)
+    })
+    .finally(() => {
+      loading.value = false
+    })
+}
+
 function handleGithubLogin() {
   const clientId = (import.meta as any).env.VITE_GITHUB_CLIENT_ID
   if (!clientId) {
@@ -60,13 +89,15 @@ function handleGoogleLogin() {
     return
   }
   const stateCode = '3EAB37D9D5310BFE'
-  window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.email&state=${stateCode}&include_granted_scopes=true&response_type=code&client_id=${clientId}&redirect_uri=${window.location.origin}/login?from=google`
+  window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile&state=${stateCode}&include_granted_scopes=true&response_type=code&client_id=${clientId}&redirect_uri=${window.location.origin}/login?from=google`
 }
 onMounted(() => {
   if (route.query.from === 'github') {
-    message.success('github login')
+    message.loading('正在获取github用户信息，请稍等...')
+    useGithubLogin(route.query.code as string)
   } else if (route.query.from === 'google') {
-    message.success('google login')
+    message.loading('正在获取google用户信息，请稍等...')
+    useGoogleLogin(route.query.code as string)
   }
 })
 </script>
