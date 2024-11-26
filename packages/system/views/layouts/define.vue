@@ -221,7 +221,7 @@ onMounted(() => {
                   </div>
                 </div>
               </template>
-              <div class="w-10 h-10 mr-5 rounded-full overflow-hidden">
+              <div class="w-8 h-8 mr-5 rounded-full overflow-hidden">
                 <img
                   v-if="!userStore.user?.avatar"
                   src="/avatar.png"
