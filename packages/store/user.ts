@@ -11,6 +11,7 @@ type UserStoreAction = {
   login(userInfo: UserLoginRes): void
   getUserInfo(): void
   updateUserInfo(): void
+  unloadMenu(): void
   loadMenuList(): Promise<Route[]>
 }
 
@@ -67,6 +68,11 @@ export const useUserStore = defineStore<string, UserStoreState, {}, UserStoreAct
         localStorage.removeItem('user')
       }
       return []
+    },
+    unloadMenu() {
+      menuLoadPromise = null
+      this.menuList = []
+      this.user = null
     }
   }
 })

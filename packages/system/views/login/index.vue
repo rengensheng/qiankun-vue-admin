@@ -4,7 +4,7 @@ import { useUserStore } from '@packages/store'
 import { userLogin } from '@packages/api/user/login'
 import { useRouter, useRoute } from 'vue-router'
 import { onMounted, ref } from 'vue'
-import { loadMenu } from '../../utils/menu'
+import { loadMenu, unLoadMenu } from '../../utils/menu'
 
 const userStore = useUserStore()
 const router = useRouter()
@@ -68,6 +68,7 @@ onMounted(() => {
   } else if (route.query.from === 'google') {
     message.success('google login')
   }
+  unLoadMenu(router)
 })
 </script>
 

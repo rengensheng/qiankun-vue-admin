@@ -114,7 +114,6 @@ async function handleRegister() {
           </Input>
         </div>
         <Button
-          type="primary"
           class="w-full mt-4 flex py-4 items-center !border-gray-600 justify-center bg-gray-600 hover:bg-gray-500 hover:outline-none hover:!text-white text-white font-bold"
           :loading="loading"
           @click="handleRegister"
