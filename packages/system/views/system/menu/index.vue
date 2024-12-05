@@ -1,5 +1,14 @@
 <script setup lang="ts">
-import { Table, Popconfirm, Button, Modal, Space, Tag, SearchForm } from '@packages/components'
+import {
+  Table,
+  Popconfirm,
+  Button,
+  Modal,
+  Space,
+  Tag,
+  SearchForm,
+  message
+} from '@packages/components'
 import { useDict, useForm, useTable } from '@packages/hooks'
 import { ref } from 'vue'
 import { DictOption, FormOption, MenuType } from '@packages/types'
@@ -117,7 +126,21 @@ const {
   sortType: 'asc',
   formOptions,
   parseList: parseMenuList,
-  getValues: getFormValues
+  getValues: getFormValues,
+  createCheck: (values: Partial<MenuType>) => {
+    if (values.parentMenu === values.id) {
+      message.error('上级菜单不能是自己')
+      return false
+    }
+    return true
+  },
+  updateCheck: (values: Partial<MenuType>) => {
+    if (values.parentMenu === values.id) {
+      message.error('上级菜单不能是自己')
+      return false
+    }
+    return true
+  }
 })
 const columns = [
   {

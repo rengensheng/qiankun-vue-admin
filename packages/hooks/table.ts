@@ -90,8 +90,6 @@ export function useTable<T extends ApiBase>(option: TableOptionType) {
       } finally {
         loading.value = false
       }
-    } else {
-      message.error(`参数校验失败`)
     }
   }
 
@@ -108,8 +106,6 @@ export function useTable<T extends ApiBase>(option: TableOptionType) {
       } finally {
         loading.value = false
       }
-    } else {
-      message.error(`参数校验失败`)
     }
   }
 

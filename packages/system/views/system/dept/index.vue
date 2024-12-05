@@ -8,7 +8,8 @@ import {
   Space,
   UseForm,
   Tag,
-  SearchForm
+  SearchForm,
+  message
 } from '@packages/components'
 import type { DeptType, DictOption, FormOption } from '@packages/types'
 import { useForm, useTable } from '@packages/hooks'
@@ -27,7 +28,8 @@ const formOptions: FormOption[] = [
     field: 'parentDept',
     name: '上级部门',
     type: 'treeSelect',
-    options: deptTreeOptions
+    options: deptTreeOptions,
+    clearable: true
   },
   {
     field: 'status',
@@ -75,7 +77,21 @@ const {
   sortItem: 'orderNo',
   sortType: 'asc',
   parseList: parseDeptList,
-  getValues: getFormValues
+  getValues: getFormValues,
+  createCheck: (values: Partial<DeptType>) => {
+    if (values.parentDept === values.id) {
+      message.error('上级部门不能是自己')
+      return false
+    }
+    return true
+  },
+  updateCheck: (values: Partial<DeptType>) => {
+    if (values.parentDept === values.id) {
+      message.error('上级部门不能是自己')
+      return false
+    }
+    return true
+  }
 })
 const columns = [
   {
