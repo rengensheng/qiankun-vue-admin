@@ -79,14 +79,14 @@ const {
   parseList: parseDeptList,
   getValues: getFormValues,
   createCheck: (values: Partial<DeptType>) => {
-    if (values.parentDept === values.id) {
+    if (values.parentDept === values.id && values.parentDept) {
       message.error('上级部门不能是自己')
       return false
     }
     return true
   },
   updateCheck: (values: Partial<DeptType>) => {
-    if (values.parentDept === values.id) {
+    if (values.parentDept === values.id && values.parentDept) {
       message.error('上级部门不能是自己')
       return false
     }

@@ -128,14 +128,14 @@ const {
   parseList: parseMenuList,
   getValues: getFormValues,
   createCheck: (values: Partial<MenuType>) => {
-    if (values.parentMenu === values.id) {
+    if (values.parentMenu === values.id && values.parentMenu) {
       message.error('上级菜单不能是自己')
       return false
     }
     return true
   },
   updateCheck: (values: Partial<MenuType>) => {
-    if (values.parentMenu === values.id) {
+    if (values.parentMenu === values.id && values.parentMenu) {
       message.error('上级菜单不能是自己')
       return false
     }
